@@ -1,6 +1,6 @@
-(function () {
+﻿(function () {
   "use strict";
-  var Z3 = function (A) {
+var Z3 = function (A) {
       const n = JX.sets[A.set.kind] || [],
         t = String(A.n).replace(/^\[(Bạch Kim)\]\s*/, "");
       return (
@@ -400,7 +400,8 @@
         .split(/\s+/)
         .slice(0, 2)
         .join(" ");
-  ((function (s) {
+
+(function (s) {
     (Object.assign(s.ge, {
       960001: {
         a: 166,
@@ -4838,8 +4839,9 @@
       "An Bang Kê Huyết Thạch Giới Chỉ": [6, 311, 431],
     };
     for (const n of s.sets.gold) A[n.n] && (n.mag = A[n.n].slice());
-  })(window.JX),
-    (window.JW = {
+  })(window.JX);
+
+window.JW = {
       zones: [
         {
           id: 2,
@@ -13385,8 +13387,8 @@
         },
       },
       town: { id: 37, n: "Biện Kinh", bg: "img/z/town.jpg" },
-    }),
-    (function () {
+  };
+  (function () {
       const s = {
         zones: {
           base: [
@@ -15129,8 +15131,9 @@
           ),
         );
       }
-    })(),
-    (window.JS = {
+    })();
+
+window.JS = {
       music: {
         2: "music/music210.mp3",
         3: "music/music211.mp3",
@@ -15645,8 +15648,8 @@
         click: "snd/sound_i001.mp3",
         open: "snd/sound_i014.mp3",
       },
-    }),
-    (window.JFX = {
+  };
+  window.JFX = {
       m: {
         2: {
           fly: {
@@ -18318,8 +18321,9 @@
         407: { form: 1, num: 1, c: 140 },
         408: { form: 2, num: 3, c: 141 },
       },
-    }),
-    (window.JMO = {
+    };
+
+window.JMO = {
       2: {
         A: 7,
         w: 3584,
@@ -18524,8 +18528,8 @@
         blocked: 12116,
         obs: "x///////////AQAAAAAH/P////////8AAAAAAAf4////////fwAAAAAAB/D///////8/AAAAAAAA4P//////fx8AAAAAwADA//////8HAAAAAADgAMD//////wMAAAAAAOAAwP//////BxgAcAAA4ADA//////8fGAD4AAAAAMD//////x8AAPwBAAAAx/////8fHgAA/gMAAACH/////w8AAAD/BwAAAAf/////BwAAgP8PAACAj/////8BAADA/x8AAOD//////wAAAOD/PwAA8P////9/AAAA8P9/AAD4/////38AAAD4//8AAPj/////PwAAAPz//wEA/P////8fAAAA/v//DwD8/////w8AAAD///8PAPz/////Bx8AgP///w8A/P////8DHwDA////HwD8/////wEfAOD///8fAPz/////AB8A8P///z8A/P///38ADgD4/////wD+////PwAAAPz/////Af////8fAwAA/v////8D/////w8DAAD//////wf/////BwMAgP//////D/////8DAADA//////8f/////wEAAOD//////z//////AAAA8P///////////38AAAD4////////////PwAAAP7///////////8/AAAA/////////////z8eAID/////////////Px4AwP////////////8PHgDg/////////////wMeAPD/////////////ARgA+P////////////8AAAD8////////////fwAAAP7///////////8/AAAA/////////////x8AAID/////////////DwAAwP//////////8P8HAADg///////////A/wMAAPD//////////4D/8QAA+P//////////gP/xAAD8//////////8A//AAAP7//////////wB+8AAA////////////AHjgAID///////////8AAAAAwP///////////wAAAADg////////////AAAAAPD///////////8AAAAA8P///////////wAAAADw////////////AAAAAPD///////////8AAAAA8P///////////wAAAADw////////////AAAAAPj///////////9wAAAA+P///////////3AAAAD4////////////cAAAAPD///////////8AAAAA4P///////////wAAAADA////////////AAAAHID///////////8AAAD+gf///////////wAAAP8D////////////AADA/wf8//////////8AAMD/D/j//////////wAAwP8f8P//////////AADA/x/g//////////8AAMD/P8D//////////wDAwf8/wP//////////AODD/z+A//////////8A8Mf/PwD//////////wD4z/8/AP7/////////APz//z8A/P////////8A/P//PwD4/////////wD8//8/APD/////////APz//z8A4P////////8A+P//PwDA/////////wDw//8fAMD/////////AOD//w8A+P////////8AwP//BwD4/////////wCAf/ADAPD/////////AIA/AAAA8Pn///////8AgB8AAADw8P///////wCAHwAAAHjg////////wYEfAAAAfMD////////DAR8AAAB+gP///////88BvwMAIH4A/v//////D4C/AwAcPgD8//////8PwL+DHxwcAP7//////w/gP4AfgAMA////////A/A/wB+AA4D///////8B+H/AD4AD8P///////wH8f8AfgAP4////////AP5/wB8AAPj///////8A/3+AHwAA+P///////wD/PwAeAAD4////////cP8fAAAAAHj8///////w/w8AgAEAAPj///////D/BwCAAQAA8P//////8P8DAIABAADg//////3g/QEAgAEAAID/////+AD4AAAAAAAAAP7//38AAAAAAAAAAAAA/P//fwAAAAAAAAAAAAD4////AAAAAAAAAAAAAOD///8BAAAAAAAAAAAAwP///wMAAAAAAAAAAACA////BwAAAAAOAADAAQD///8PAAAAAB8AAMAAAM7//w8AAACAPwDwwQAAgP//DwAAAMB/APgBAAAA//8PAAAA4P8A/AEAAAD//wMBAADw/wD8AQAAAP7/gQcAAPD/APwBAACA///ADwAA+P8A/AEAAMD/f+APAAD8fwD4AQAHwM8//g8AAP4/AIABAAfAjx9+DwAA/x8AAAAAB8AHHz4PAAD/DwAAAAAA8AM+HAcAAP8HAAAAAADwAPwDAwAA/gMAAAAAAAAA+AMBAAD8AQAA4AAAAADwAwAAAPwAAADgAAAAAOABAAAAeAAAAOAAPAAAAAAHAAAAAACAAAB+AMcBAAcAAAAAAAAAAP84xwEABwAAAAAAAAKA/znHAYAAAAAAAAAAB8D/OwAAwAAAAAAAAAAH4P8HAADgAAAAAAAAfAfw/w8AAPAYAAAAAGD+APj/HwAA+B4AAAAA4P8B/P8/AAD+PwAADADg/wP+/38AAP8/AAAeAP//h///fwCA/38AAD8A///P//9/AID//wGA/wD//////38AwP//AcD/Af7/////PwDw//4B4P8B/P////8fAPB/+ADg/wEA/////w8A8D9wAPD/AwD+////BwDwHwAc/P8HAPz///8DAPAPAD78/w8A+P///wEAwA8A//z/HwD4////AQCAHwD/8f88APj///8BAIA/AP/nf3gA+P//DwAAAH8A/uc/8AD4//8HAAAP/gD85x/gAfD//wcAAB/8APiDD8AD8P//AwAAH/gA8IEHgAfw//8DAAAe8ADwwAMAD+D5/wMAAADgAHjgAQAeAPD/AwAAAMAAOPAAADwA4P8DAAAAwAAAeAAAeADwzwMAAACAAAA+AADwAPDHAwAAADgAAA8AAOAB8MEBAAAAOACPBwAAwAfwAAAAAAA4AN8DAAAADwAAAAAAAAAA/wEAAAAeAAAAAAAAAAD/AAAAADwAAAAAAAAAAP8AAAAAeAAAAAAAAACA/wEAAADwAAAAAAAAAMD/AAAAAOABAAAAAAAA4P8AAAAAwAMAAAAAAADw/wEAAACABwAAAAAAAPj/AwAAAIAPAAAAAAAA/P8HAAAAAB8AAOAAAAD+/w8AAAAAPAAA4AAAAP//HwAAAAB4AADgAAAA//8/AAAAAPAAAAAAAAD//38AAAAA4IEHAAAAAP///wAAAADAww8AAAAA////AQAAAIDnHwBwAAD///8DAAAAAP88AHAAAP///wMAAAAAfngAcAAA////BwAAAAA88AAAAAD///8PAAAAAADgAQAAAP///x8AAAAAAMADAAAA////PwAAAAAAgAMAAAD///9/AAAAAAAABwAAAP////8AAAAAAAAOAOAA/8///wEAAAAAAB4A4AD/x///AwAAAAAAPADgAP7j//8HAAAAAAB4AAAA/PH//w8AAAAAAPAAAAD4+P//HwAAAAAA4AEAAHD8//8/AAAAAADAAwAAMP7//38AAAAAAIAHAAAw/v///wAAAAAAAB8AAAD+////AQAAAAAAPAAAAP7//88DAAAAAAB4AAAA/v//jwcAAAAAAPAAAAD8//8DDwAAAAAA4AEAAPj4/wEeAAAAAADAAwAAAPD/ATwAAAAAAIAHgAAA4P8AeAAAAAAAAA/AAADAfwDwAAAAAAAAHuABAAB/AOABAAAAAAA88AMAAD4A8AMAAAAAAHj4BwAADwDwAwAAAAAA8PwPAHAHAPgDAAAAAADg/x8A/AcA/AEAAAAAAMD/PwD8AAD+AQAAAAAAgP9/APwAAP8AAAAAAADA//8A/ACA/wAAAAAAAOD//wHwAMD/AAAAAAAA8P//A+AAwB8AAAAAAAD4//8PAADADwAAAAAAAPz//x8AAMAfAAAAAAAA/v//PwAAwH8AAAAAAAD///8/AACAfwAAAAAAgP///z8AAMD/AAAAAADA////PwAA8P8HAAAAAOD///8/AAD4/w8AAAAA8P///x8AAPz/HwAAAAD4////HwAA/P8/AAAAAPz///8HAAD8/38AAAAA/v///wMAAP7//wEAAAD/////AQAA/v//AQAAgP///w==",
       },
-    }),
-    Object.assign(window.JMO, {
+  };
+  Object.assign(window.JMO, {
       397: {
         A: 7,
         w: 3584,
@@ -69798,8 +69802,9 @@
           ],
         },
       },
-    }));
-  var _e = function (A, n) {
+    });
+
+var _e = function (A, n) {
       let t = 0;
       for (const a of A) t += n(a);
       let e = Math.random() * t;
@@ -70206,7 +70211,8 @@
       }
     },
   });
-  var K1 = 10,
+
+var K1 = 10,
     C3 = 0.08,
     L8 = 0.05,
     O3 = 0.04,
@@ -73527,7 +73533,8 @@
       },
     ];
   for (const s of r1) s.knb && !s.kx && (s.knb *= c4);
-  var J3 = 999,
+
+var J3 = 999,
     Hm = (s) =>
       r.inv.length < INV_MAX ||
       r.inv.some((A) => A.ktc && A.ktc.k === s && A.ktc.c < J3),
@@ -76799,7 +76806,8 @@
       (S.sets.platina.push(e), _1.set(A, [e]));
     }
   })();
-  var Gl = (s) =>
+
+var Gl = (s) =>
       s && s.set && s.set.kind === "platina"
         ? S.sets.platina.find((A) => A.vng === 2 && A.n === s.n)
         : null,
@@ -77561,8 +77569,17 @@
       return g;
     },
     zw = function () {
-      const A = c.P,
-        n = M1();
+      const A = c.P;
+      // Ưu tiên tìm kiếm và tấn công người chơi nếu ở chế độ PK hoặc đã chọn mục tiêu người chơi
+      if (r.mode === "pk" || (c.playerTgt && c.playerTgt.hp > 0)) {
+        if (typeof window.__volamidleOnline?.executePvPCombatTick === "function") {
+          const pvpRes = window.__volamidleOnline.executePvPCombatTick();
+          if (pvpRes !== false) {
+            return typeof pvpRes === "number" ? pvpRes : 0.25;
+          }
+        }
+      }
+      const n = M1();
       if (!n.length) return 0.3;
       const t = fA() && c.manTgt && n.includes(c.manTgt) ? c.manTgt : jw(n);
       let e = Iw(A, t.cls === "boss" || t.cls === "elite" || !!t.goldBoss);
@@ -77659,8 +77676,8 @@
         (A.dir = On(e.x - A.x, e.y - A.y)),
         (A.seeT = (A.seeT || 0) - n) <= 0 &&
           ((A.seeT = 0.25), (A.see = a > i + 4 || Yn(A.x, A.y, e.x, e.y))),
-        (A.moving = a > i || !A.see),
-        A.moving && mg(A, e.x, e.y, A.spd * t * n),
+        (A.moving = A.sid != null ? !!A.smv : a > i || !A.see),
+        A.moving && A.sid == null && mg(A, e.x, e.y, A.spd * t * n),
         A.home && k9(A),
         (A.atkCd -= n * t),
         a <= i + 4 &&
@@ -77728,7 +77745,10 @@
       }
       (IP(A), (c.activeT = (c.activeT || 0) + A));
       const t = Xm(A);
-      if ((a2() && b9(A), !c.enemies.length)) {
+      if (
+        ((window.MPMON && window.MPMON.tick(A)) || (a2() && b9(A)),
+        !c.enemies.length)
+      ) {
         if (a2()) return;
         if (t && c.lootWait < 8) {
           c.lootWait += A;
@@ -77769,7 +77789,7 @@
                     150 * i2() * (c.slowT > 0 ? e2 : 1) * A,
                   )
                 : c.moveTo &&
-                  c.moveTo.hp > 0 &&
+                  (c.moveTo.hp > 0 || c.moveTo._isPvpTarget) &&
                   !t &&
                   (c.stunT > 0 ||
                     Ce(
@@ -77779,7 +77799,7 @@
                       150 * i2() * (c.slowT > 0 ? e2 : 1) * A,
                     ))),
           !(c.stunT > 0) &&
-            !(fA() && !c.manTgt) &&
+            !(fA() && !c.manTgt && r.mode !== "pk") &&
             ((c.atkT -= A * (c.slowT > 0 ? e2 : 1)),
             c.atkT <= 0 && (c.atkT = zw()))));
       for (const e of M1()) Xl(e, A);
@@ -77812,13 +77832,17 @@
         z4());
     },
     Jl = function () {
-      for (const A of c.enemies)
-        A.hp <= 0 &&
-          !A.dead &&
-          ((A.dead = !0),
-          Gw(A),
-          Ai(r0[A.tid].anim, "die", 0.5),
-          c.quiet || ((A.act = "die"), (A.actT = 0), c.corpses.push(A)));
+      (window.MPMON && window.MPMON.flush(),
+        c.enemies.forEach(
+          (A) =>
+            A.hp <= 0 &&
+            !A.dead &&
+            ((A.dead = !0),
+            // Quái đồng bộ từ server: chỉ người đã gây sát thương mới nhận thưởng
+            (A.sid != null && !(A._myDmg > 0)) || Gw(A),
+            Ai(r0[A.tid].anim, "die", 0.5),
+            c.quiet || ((A.act = "die"), (A.actT = 0), c.corpses.push(A))),
+        ));
       !a2() &&
         c.enemies.length &&
         c.enemies.every((A) => A.dead) &&
@@ -77915,7 +77939,7 @@
     Rw = function () {
       if (
         (c.enemies.some((A) => A.goldBoss && !A.dead) && (Q().gbT = qd),
-        (c.deadT = 3),
+        (c.deadT = 999999), // Tạm dừng đếm lùi hồi sinh tự động tại chỗ trong khi chờ chọn
         (c.life = 0),
         (c.enemies = []),
         rP(),
@@ -77931,6 +77955,47 @@
         return;
       }
       typeof vt == "function" && vt();
+
+      // Hiển thị dialog "Về Thành Dưỡng Sức"
+      if (typeof window.showDeathDialog === "function") {
+        window.showDeathDialog();
+      } else if (typeof J === "function") {
+        const modalHtml = `
+          <div style="text-align:center;padding:12px 6px;">
+            <div style="font-size:36px;margin-bottom:6px;">☠️</div>
+            <h3 style="color:#ff4757;margin:0 0 8px;font-size:20px;letter-spacing:1px;">HIỆP KHÁCH TRỌNG THƯƠNG</h3>
+            <p style="color:#dcdde1;font-size:14px;line-height:1.5;margin:0 0 16px;">
+              Sinh lực đã cạn kiệt, không thể tiếp tục chiến đấu.<br>
+              Hãy trở về thành thị an toàn để điều tức, hồi phục sinh lực và chỉnh đốn trang bị!
+            </p>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+              <button id="btnReturnTownDeath" class="btn" style="background:linear-gradient(135deg, #c0392b, #8e1b1b);color:#fff;border:1px solid #ff7675;padding:9px 20px;font-weight:bold;font-size:14px;border-radius:6px;cursor:pointer;box-shadow:0 0 12px rgba(231,76,60,0.4);">
+                🏛️ Về Thành Dưỡng Sức (Biện Kinh)
+              </button>
+            </div>
+          </div>
+        `;
+        J(modalHtml, () => {
+          const btn = document.getElementById("btnReturnTownDeath");
+          if (btn) {
+            btn.onclick = () => {
+              if (typeof t0 === "function") t0(true);
+              if (typeof window.respawnAtTown === "function") {
+                window.respawnAtTown();
+              } else {
+                c.deadT = 0;
+                if (c.P) {
+                  c.life = c.P.life;
+                  c.mana = c.P.mana;
+                }
+                if (typeof window.returnToTown === "function") {
+                  window.returnToTown(true, "Về thành dưỡng sức · Hồi phục hoàn toàn");
+                }
+              }
+            };
+          }
+        }, true);
+      }
     },
     u0 = function () {
       typeof w6 == "function" && w6();
@@ -79324,7 +79389,8 @@
   setInterval(() => {
     (W9(), Z9(), Ap(), pc());
   }, 2e3);
-  var PA = function (A) {
+
+var PA = function (A) {
       if (!A) return null;
       let n = Pc[A];
       return (n || ((n = new Image()), (n.src = A), (Pc[A] = n)), n);
@@ -79781,11 +79847,12 @@
         }
     },
     lp = function (A) {
-      if (c.town || r.miniMap === !1) return;
-      const n = sA.s,
-        t = k0.w - n - sA.m,
-        e = sA.top,
-        a = n / M0.w;
+      if (!A || r.miniMap === !1) return;
+      const n = (sA && sA.s) || 92,
+        t = (k0.w || 300) - n - ((sA && sA.m) || 8),
+        e = (sA && sA.top) || 62,
+        mapWidth = (typeof M0 !== "undefined" && M0.w) ? M0.w : 1536,
+        a = n / mapWidth;
       (A.save(),
         (A.globalAlpha = 0.9),
         (A.fillStyle = "#000c"),
@@ -79817,28 +79884,46 @@
           Math.min(n, k0.w * a),
           Math.min(n, k0.h * a),
         ));
-      for (const h of c.ground)
-        hA(h.it) &&
-          ((A.fillStyle = b0[h.it.r]),
+      for (const h of (c.town ? [] : (c.ground || [])))
+        typeof hA === "function" && hA(h.it) &&
+          ((A.fillStyle = (typeof b0 !== "undefined" && b0[h.it.r]) || "#fff"),
           A.fillRect(t + h.x * a - 1, e + h.y * a - 1, 2, 2));
-      for (const h of c.enemies) {
+      for (const h of (c.enemies || [])) {
         if (h.dead) continue;
         const g = h.cls === "boss" ? 3.2 : h.cls === "elite" ? 2.4 : 1.8;
         ((A.fillStyle = h.goldBoss
           ? "#ffd24a"
           : h.cls === "boss"
             ? "#ff4a3a"
-            : m0[h.series]),
+            : ((typeof m0 !== "undefined" && m0[h.series]) || "#ff4a3a")),
           A.beginPath(),
           A.arc(t + h.x * a, e + h.y * a, g, 0, 7),
           A.fill());
       }
+      if (typeof othEnts === "function") {
+        try {
+          const oths = othEnts();
+          for (const ent of oths) {
+            const p = ent.oth;
+            if (p) {
+              const px = Number.isFinite(p.renderX) ? p.renderX : p.x;
+              const py = Number.isFinite(p.renderY) ? p.renderY : p.y;
+              if (Number.isFinite(px) && Number.isFinite(py)) {
+                A.fillStyle = "#2ed573";
+                A.beginPath();
+                A.arc(t + px * a, e + py * a, 2.2, 0, 7);
+                A.fill();
+              }
+            }
+          }
+        } catch {}
+      }
       c.petPos &&
         ((A.fillStyle = "#9fe36a"),
         A.fillRect(t + c.petPos.x * a - 1.5, e + c.petPos.y * a - 1.5, 3, 3));
-      const o = t + b.x * a,
-        l = e + b.y * a,
-        d = Math.PI / 2 + ((b.dir || 0) * Math.PI) / 4;
+      const o = t + (b.x || 0) * a,
+        l = e + (b.y || 0) * a,
+        d = Math.PI / 2 + (((b.dir || 0)) * Math.PI) / 4;
       ((A.fillStyle = "#fff"),
         (A.strokeStyle = "#000"),
         A.beginPath(),
@@ -79852,19 +79937,22 @@
         A.strokeRect(t - 2, e - 2, n + 4, n + 4),
         (A.font = '9px "IBM Plex Mono", monospace'),
         (A.textAlign = "center"),
-        (A.fillStyle = "#f3d88a"),
-        A.fillText(
-          c.dg
-            ? c.dg.kind === "wb"
-              ? "Boss tuần"
-              : c.dg.d.n
-            : c.tower
-              ? `Tháp · tầng ${c.tower.floor}`
-              : V0(Math.min(r.stage, l0)).n,
-          t + n / 2,
-          e + n + 11,
-        ),
-        A.restore());
+        (A.fillStyle = "#f3d88a"));
+      const mapTitle = c.town
+        ? (c.curZone && c.curZone.n) || (typeof H0 !== "undefined" && H0.town && H0.town.n) || "Biện Kinh"
+        : c.dg
+          ? c.dg.kind === "wb"
+            ? "Boss tuần"
+            : c.dg.d?.n || "Phó bản"
+          : c.tower
+            ? `Tháp · tầng ${c.tower.floor}`
+            : (typeof V0 === "function" ? V0(Math.min(r.stage || 1, typeof l0 !== "undefined" ? l0 : 1)).n : "Luyện công");
+      A.fillText(
+        mapTitle,
+        t + n / 2,
+        e + n + 11,
+      );
+      A.restore();
     },
     r5 = function (A, n, t, e, a, i) {
       if (!A || r.lowFx) return i();
@@ -80387,8 +80475,8 @@
         (typeof window.onWorldDrawAfterFx == "function" && window.onWorldDrawAfterFx(n, A)),
         n.setTransform(d1, 0, 0, d1, 0, 0),
         typeof md == "function" && md(n),
-        lp(n),
-        qP(n),
+        typeof lp == "function" && lp(n),
+        typeof qP == "function" && qP(n),
         c.banner &&
           c.banner.t > 0 &&
           ((c.banner.t -= A),
@@ -80941,7 +81029,8 @@
       395: 5,
     };
   (a0.f && a0.f[10] && (a0.f[10].c = 140), a0.s && (a0.s[10] = 140));
-  var bp = { 302: { t: 30, mid: 126, n: 8, form: 3 } },
+
+var bp = { 302: { t: 30, mid: 126, n: 8, form: 3 } },
     Tc = {
       179: [0, 15, 0, 15, 0, 0, 0, 0, 1, 2, 0, 0],
       188: [0, 22, 0, 10, 0, 0, 0, 0, 1, 3, 0, 0],
@@ -83231,6 +83320,7 @@
       ((
         (
           document.querySelector('script[src*="app.js"]') ||
+          document.querySelector('script[src*="src/"]') ||
           document.querySelector('script[src*="js/core.js"]') ||
           {}
         ).src || ""
@@ -83245,7 +83335,8 @@
       }),
       document.head.appendChild(s));
   }
-  var Ws = {
+
+var Ws = {
       头部: 0,
       发型: 1,
       肩膀: 4,
@@ -85638,36 +85729,54 @@
             : `${t.n} (-${j(Rt(t))} lượng)`,
         ));
     },
+    returnToTown = function (force = false, bannerSub = "Hồi phục · bán đồ · trở lại bãi") {
+      if (c.dg && !force) {
+        y("Đang trong phó bản / boss tuần");
+        return;
+      }
+      if (!force && (c.tpCd || 0) > 0) {
+        y(`Thổ Địa Phù hồi sau ${Math.ceil(c.tpCd)} giây`);
+        return;
+      }
+      const townInfo = (typeof H0 !== 'undefined' && H0.town) ? H0.town : { id: 37, n: "Biện Kinh", bg: "img/z/town.jpg" };
+      c.town = true;
+      c.curZone = { id: townInfo.id || "town", n: townInfo.n || "Biện Kinh", bg: townInfo.bg };
+      c.enemies = [];
+      c.corpses = [];
+      c.pickTarget = null;
+      c.moveTo = null;
+      if (typeof K !== 'undefined') K.target = null;
+      if (typeof Te === 'function') Te("town");
+      if (typeof K0 === 'function' && typeof M0 !== 'undefined') {
+        [b.x, b.y] = K0(M0.w / 2, M0.h / 2);
+      }
+      if (typeof nn === 'function') nn();
+      if (townInfo.bg && typeof PA === 'function') c.bgImg = PA(townInfo.bg);
+      if (typeof i0 === 'function') i0("use");
+      if (typeof Vt === 'function' && townInfo.id) Vt(townInfo.id);
+      const tnEl = document.getElementById("townName");
+      if (tnEl) tnEl.textContent = townInfo.n || "Biện Kinh";
+      const tbEl = document.getElementById("townBar");
+      if (tbEl) tbEl.classList.remove("hidden");
+      c.banner = {
+        t: 2.5,
+        text: townInfo.n || "Biện Kinh",
+        sub: bannerSub,
+      };
+      if (typeof M === 'function') {
+        M(`Đã trở về thành dưỡng sức tại <b>${D(townInfo.n || "Biện Kinh")}</b>.`);
+      }
+      if (window.heroPos) {
+        window.heroPos.x = b.x;
+        window.heroPos.y = b.y;
+      }
+      if (typeof window.__volamidleOnline?.updateUi === 'function') {
+        window.__volamidleOnline.updateUi();
+      }
+    },
     C5 = function () {
       if (!c.town) {
-        if (c.dg) {
-          y("Đang trong phó bản / boss tuần");
-          return;
-        }
-        if ((c.tpCd || 0) > 0) {
-          y(`Thổ Địa Phù hồi sau ${Math.ceil(c.tpCd)} giây`);
-          return;
-        }
-        ((c.town = !0),
-          (c.enemies = []),
-          (c.corpses = []),
-          (c.pickTarget = null),
-          (c.moveTo = null),
-          (K.target = null),
-          Te("town"),
-          ([b.x, b.y] = K0(M0.w / 2, M0.h / 2)),
-          nn(),
-          (c.bgImg = PA(H0.town.bg)),
-          i0("use"),
-          Vt(H0.town.id),
-          (u("#townName").textContent = H0.town.n),
-          u("#townBar").classList.remove("hidden"),
-          (c.banner = {
-            t: 2.2,
-            text: H0.town.n,
-            sub: "Hồi phục · bán đồ · trở lại bãi",
-          }),
-          M(`Dùng Thổ Địa Phù về <b>${D(H0.town.n)}</b>.`));
+        returnToTown(false);
       }
     },
     E1 = function () {
@@ -85683,6 +85792,7 @@
           (c.zoneShown = null),
           u("#townBar").classList.add("hidden"),
           vn(V0(Math.min(r.stage, l0))));
+        typeof Bh === "function" && Bh();
       }
     },
     uD = function (A) {
@@ -85788,6 +85898,17 @@
               (K.mouse = !1));
             return;
           }
+          // Kiểm tra mục tiêu Hiệp khách khác (PvP Player Targeting)
+          const pvpTgt = typeof window.__volamidleOnline?.findPlayerAt === "function"
+            ? window.__volamidleOnline.findPlayerAt(o + p0.x, l + p0.y)
+            : null;
+          if (pvpTgt) {
+            window.__volamidleOnline.selectTargetPlayer(pvpTgt, true);
+            K.mouse = false;
+            K.target = null;
+            return;
+          }
+
           if (fA()) {
             const f = gd(o + p0.x, l + p0.y);
             if (f) {
@@ -85844,6 +85965,16 @@
           ((K.mouse = !1), (K.active = !1), (K.id = null), (K.moved = !1), !o)
         )
           return;
+        // Kiểm tra mục tiêu Hiệp khách khác (PvP Player Targeting)
+        const pvpTgt = typeof window.__volamidleOnline?.findPlayerAt === "function"
+          ? window.__volamidleOnline.findPlayerAt(a + p0.x, i + p0.y)
+          : null;
+        if (pvpTgt) {
+          window.__volamidleOnline.selectTargetPlayer(pvpTgt, true);
+          K.target = null;
+          return;
+        }
+
         if (fA()) {
           const d = gd(a + p0.x, i + p0.y);
           if (d) {
@@ -86146,7 +86277,12 @@
   if (S.shops && S.shops.horse)
     for (const s of S.shops.horse.items)
       s.g !== 1 && bd[s.lvl] && (s.price = bd[s.lvl]);
-  var I5 = (s, A) => (s.s >= 0 ? s.s : s._s === void 0 ? (s._s = A.s) : s._s),
+
+  window.returnToTown = returnToTown;
+  window.C5 = C5;
+  window.E1 = E1;
+
+var I5 = (s, A) => (s.s >= 0 ? s.s : s._s === void 0 ? (s._s = A.s) : s._s),
     S5 = function () {
       return (
         Array.isArray(r.potSlot) || (r.potSlot = ["auto", "auto"]),
@@ -91678,17 +91814,23 @@ ${
     },
     fn = function (A, n, t) {
       if (!B0[A] || c.dg || c.tower) return !1;
+      const wasTown = !!c.town;
       c.town && E1();
+      c.town = !1;
       const e = $r(A),
         a = dA(Math.min(r.stage, l0)) === A;
-      if (((r.stage = e), (r.wave = 1), !a)) {
+      r.stage = e;
+      r.wave = 1;
+      const curTarget = V0(e);
+      const isDifferentZone = !a || wasTown || (c.curZone && curTarget && c.curZone.id !== curTarget.id);
+      if (isDifferentZone) {
         (t || ((c.enemies = []), (c.corpses = []), (c.spawnT = 0.6)), Xi());
-        const i = V0(e);
-        ((c.zoneShown = i.id),
-          vn(i),
-          (c.banner = { t: 2.2, text: i.n, sub: n || `Cấp ${i.lo}–${i.hi}` }),
-          n && M(`🗺 ${D(n)}: tới <b>${D(i.n)}</b>`));
+        ((c.zoneShown = curTarget.id),
+          vn(curTarget),
+          (c.banner = { t: 2.2, text: curTarget.n, sub: n || `Cấp ${curTarget.lo}–${curTarget.hi}` }),
+          n && M(`🗺 ${D(n)}: tới <b>${D(curTarget.n)}</b>`));
       }
+      typeof Bh === "function" && Bh();
       return !0;
     },
     ge = function () {
@@ -91811,7 +91953,13 @@ ${
         else if (A === "dg")
           (M("🏯 Chế độ <b>Phó Bản</b>: tự vào phó bản còn lượt."),
             Ni() || y("Hết lượt phó bản hôm nay: luyện công"));
-        else {
+        else if (A === "pk") {
+          M("🔥 Chế độ <b>Chiến Đấu PK</b>: Tự động tìm kiếm, truy sát và tấn công người chơi khác!");
+          if (typeof y === "function") y("Chế độ PK: Ưu tiên tấn công người chơi!");
+          if (typeof window.__volamidleOnline?.onPkModeActivated === "function") {
+            window.__volamidleOnline.onPkModeActivated();
+          }
+        } else {
           M("⚔ Chế độ <b>Luyện Công</b>.");
           const n = r.autoMap === !1 ? dA(Math.min(r.stage, l0)) : he();
           fn(n, "Luyện công");
@@ -91822,6 +91970,7 @@ ${
     Iv = function (A) {
       const n = r.mode === "quest",
         t = r.mode === "dg",
+        p = r.mode === "pk",
         e = X0(),
         a = e.task,
         i = c.dg
@@ -91838,7 +91987,9 @@ ${
                 ? Ni()
                   ? `🏯 Sắp vào ${D(Ni().n)}`
                   : "🏯 Hết lượt phó bản: luyện công"
-                : "";
+                : p
+                  ? "🔥 Chế độ PK: Ưu tiên tìm kiếm và tấn công người chơi"
+                  : "";
       return `<div class="card modec">
     <div><b>${D(A.n)}</b> <small class="dim">bản đồ cấp ${A.lo}–${A.hi} · quái cấp ~${zt(r.stage)} · trùm hồi sinh ${oc / 60} phút</small></div>
     ${i ? `<div class="small cp">${i}</div>` : ""}
@@ -91911,6 +92062,12 @@ ${
         "🗼",
         "Leo Tháp",
         "Vào Thông Thiên Tháp leo liên tục từ tầng (kỷ lục − 4); gục ngã thì tự chuyển về Luyện Công",
+      ],
+      [
+        "pk",
+        "🔥",
+        "Chiến Đấu PK",
+        "Chế độ PK: Tự động tìm kiếm, truy sát và tấn công người chơi khác trên bản đồ",
       ],
     ],
     bf = () => Cr.find((s) => s[0] === (r.mode || "farm")) || Cr[0],
@@ -93710,7 +93867,8 @@ MẸO: Hành trang → 💎 Đồ để ép Tím: bật tự nhặt đồ trắn
     url: "https://bzgxytkuwqvshbnkazyv.supabase.co",
     key: "sb_publishable_fvDq743OAeHgmavUkBzD3g_tQ4nwr4E",
   };
-  var Db = function () {
+
+var Db = function () {
       if (u("#chatBox")) return;
       const A = document.createElement("div");
       ((A.id = "chatBox"),
@@ -93880,6 +94038,14 @@ MẸO: Hành trang → 💎 Đồ để ép Tím: bật tự nhặt đồ trắn
       )
         return;
       if (Kf(A)) return y("Không gửi được tin dạng câu lệnh / mã lệnh");
+
+      // Đồng bộ tin nhắn ra kênh Giang hồ multiplayer (WebSocket / HTTP server)
+      try {
+        if (window.__volamidleOnline && typeof window.__volamidleOnline.sendChatMessageDirect === 'function') {
+          window.__volamidleOnline.sendChatMessageDirect(A);
+        }
+      } catch (err) {}
+
       if (!x.sb)
         return y(
           x.state === "load"
@@ -93969,6 +94135,11 @@ MẸO: Hành trang → 💎 Đồ để ép Tím: bật tự nhặt đồ trắn
             : (x.msgs[o] = a)
           : Gr(a),
           yA());
+        try {
+          if (window.__volamidleOnline && typeof window.__volamidleOnline.sendChatMessageDirect === 'function') {
+            window.__volamidleOnline.sendChatMessageDirect(A);
+          }
+        } catch (err) {}
       }
     },
     Lf = function () {
@@ -94327,6 +94498,31 @@ MẸO: Hành trang → 💎 Đồ để ép Tím: bật tự nhặt đồ trắn
         t.appendChild(e));
     };
   }
+  window.__nativeChat = {
+    pushMsg: (msg) => {
+      try {
+        if (!msg) return;
+        const formatted = {
+          id: msg.id || 'ws_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+          cid: msg.userId || msg.cid || 'remote',
+          name: msg.name || 'Vô danh',
+          fac: msg.fac || '',
+          lvl: msg.lvl || msg.level || 0,
+          msg: msg.text || msg.msg || '',
+          ts: msg.ts || Date.now(),
+          sys: msg.sys || msg.name === 'Hệ thống',
+        };
+        Gr(formatted);
+      } catch (err) {}
+    },
+    sendMsg: async (text) => {
+      try {
+        if (typeof Kr === 'function') {
+          return await Kr(text);
+        }
+      } catch (err) {}
+    },
+  };
   var Xr = !1;
   ["pointerdown", "keydown", "wheel", "touchstart"].forEach((s) =>
     window.addEventListener(
@@ -94376,6 +94572,147 @@ MẸO: Hành trang → 💎 Đồ để ép Tím: bật tự nhặt đồ trắn
       for (const [l, d, h] of o) if (await a(l, d)) return (i(h), l);
       return A.url;
     },
+    loadServerSession = function () {
+      try {
+        const raw =
+          localStorage.getItem("volamidle_server_session") ||
+          sessionStorage.getItem("volamidle_server_session");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.access_token && parsed.user) {
+            try {
+              sessionStorage.setItem("volamidle_token", parsed.access_token);
+              sessionStorage.setItem("volamidle_userId", parsed.user.id);
+              sessionStorage.setItem("volamidle_name", parsed.user.username);
+            } catch (err) {}
+            return parsed;
+          }
+        }
+      } catch (e) {}
+      try {
+        const token = sessionStorage.getItem("volamidle_token") || localStorage.getItem("volamidle_token");
+        const userId = sessionStorage.getItem("volamidle_userId") || localStorage.getItem("volamidle_userId");
+        const uname = sessionStorage.getItem("volamidle_name") || localStorage.getItem("volamidle_name");
+        if (token && userId && uname) {
+          return {
+            access_token: token,
+            token_type: "bearer",
+            user: {
+              id: userId,
+              email: uname + Zr,
+              username: uname,
+              user_metadata: { username: uname },
+            },
+          };
+        }
+      } catch (e) {}
+      return null;
+    },
+    saveServerSession = function (session) {
+      try {
+        if (session) {
+          const s = JSON.stringify(session);
+          localStorage.setItem("volamidle_server_session", s);
+          sessionStorage.setItem("volamidle_server_session", s);
+          sessionStorage.setItem("volamidle_token", session.access_token);
+          sessionStorage.setItem("volamidle_userId", session.user.id);
+          sessionStorage.setItem("volamidle_name", session.user.username);
+          localStorage.setItem("volamidle_token", session.access_token);
+          localStorage.setItem("volamidle_userId", session.user.id);
+          localStorage.setItem("volamidle_name", session.user.username);
+          if (window.VolamMultiplayer && window.VolamMultiplayer.state) {
+            window.VolamMultiplayer.state.token = session.access_token;
+            window.VolamMultiplayer.state.userId = session.user.id;
+            window.VolamMultiplayer.state.username = session.user.username;
+          }
+        } else {
+          localStorage.removeItem("volamidle_server_session");
+          sessionStorage.removeItem("volamidle_server_session");
+          sessionStorage.removeItem("volamidle_token");
+          sessionStorage.removeItem("volamidle_userId");
+          sessionStorage.removeItem("volamidle_name");
+          localStorage.removeItem("volamidle_token");
+          localStorage.removeItem("volamidle_userId");
+          localStorage.removeItem("volamidle_name");
+        }
+      } catch (e) {}
+    },
+    authListeners = new Set(),
+    notifyAuthChange = function (event, session) {
+      for (const cb of authListeners) {
+        try { cb(event, session); } catch (e) {}
+      }
+    },
+    serverLogin = async function (username, password) {
+      const apiBase = window.SERVER_API_BASE || window.SAVES_API_BASE || "";
+      const res = await fetch(apiBase + "/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (e) {}
+      if (!res.ok || !data || !data.ok) {
+        const msg = (data && data.error) || (res.status === 401 ? "Sai mật khẩu" : "Lỗi đăng nhập (" + res.status + ")");
+        return { data: { session: null, user: null }, error: new Error(msg) };
+      }
+      const user = {
+        id: data.userId,
+        email: data.username + Zr,
+        username: data.username,
+        user_metadata: { username: data.username },
+        profile: data.profile || null,
+      };
+      const session = {
+        access_token: data.token,
+        token_type: "bearer",
+        user,
+      };
+      saveServerSession(session);
+      k.user = user;
+      notifyAuthChange("SIGNED_IN", session);
+      return { data: { session, user }, error: null };
+    },
+    serverAuth = {
+      async getSession() {
+        const s = loadServerSession();
+        return { data: { session: s }, error: null };
+      },
+      async getUser() {
+        const s = loadServerSession();
+        return { data: { user: s ? s.user : null }, error: null };
+      },
+      async signInWithPassword({ email, password, username }) {
+        const uname = username || (email ? email.replace(Zr, "") : "");
+        return await serverLogin(uname, password);
+      },
+      async signUp({ email, password, username }) {
+        const uname = username || (email ? email.replace(Zr, "") : "");
+        return await serverLogin(uname, password);
+      },
+      async signOut() {
+        saveServerSession(null);
+        k.user = null;
+        notifyAuthChange("SIGNED_OUT", null);
+        return { error: null };
+      },
+      async refreshSession() {
+        const s = loadServerSession();
+        return { data: { session: s }, error: null };
+      },
+      onAuthStateChange(cb) {
+        authListeners.add(cb);
+        return {
+          data: {
+            subscription: {
+              unsubscribe: () => authListeners.delete(cb),
+            },
+          },
+        };
+      },
+    },
     s3 = function () {
       return k.sb
         ? Promise.resolve(k.sb)
@@ -94388,37 +94725,32 @@ MẸO: Hành trang → 💎 Đồ để ép Tím: bật tự nhặt đồ trắn
               try {
                 localStorage.removeItem("jxidle_auth");
               } catch {}
-              const t = window.supabase.createClient(n, A.key, {
+              const t0 = window.supabase.createClient(n, A.key, {
                 auth: {
-                  persistSession: !0,
-                  autoRefreshToken: !0,
-                  storageKey: "jxidle_auth",
-                  storage: window.sessionStorage,
+                  persistSession: !1,
+                  autoRefreshToken: !1,
                 },
               });
-              try {
-                const { data: e } = await t.auth.getSession();
-                k.user = e && e.session ? e.session.user : null;
-              } catch {
-                k.user = null;
-              }
-              return (
-                t.auth.onAuthStateChange((e, a) => {
-                  if (a && a.user) k.user = a.user;
-                  else if (e === "SIGNED_OUT") {
-                    const i = !!k.user;
-                    ((k.user = null),
-                      i &&
-                        !k.loggingOut &&
-                        r &&
-                        r.fac &&
-                        setTimeout(() => Wf(), 0));
-                  }
-                  r3();
-                }),
-                (k.sb = t),
-                t
-              );
+              // Bảng `saves` được chuyển sang backend (src/systems/saves-backend.js)
+              const t = window.SavesBackend ? window.SavesBackend.wrap(t0) : t0;
+              t.auth = serverAuth;
+              const cur = loadServerSession();
+              k.user = cur ? cur.user : null;
+              t.auth.onAuthStateChange((e, a) => {
+                if (a && a.user) k.user = a.user;
+                else if (e === "SIGNED_OUT") {
+                  const i = !!k.user;
+                  ((k.user = null),
+                    i &&
+                      !k.loggingOut &&
+                      r &&
+                      r.fac &&
+                      setTimeout(() => Wf(), 0));
+                }
+                r3();
+              });
+              k.sb = t;
+              return t;
             })().catch((A) => {
               throw ((k.sbP = null), A);
             }))
@@ -94433,35 +94765,26 @@ MẸO: Hành trang → 💎 Đồ để ép Tím: bật tự nhặt đồ trắn
             (0.8 + Math.random() * 0.4)));
     },
     Yf = async function (A, n, t) {
-      if (
-        ((n = String(n || "")
-          .trim()
-          .toLowerCase()),
-        !/^[a-z0-9_]{3,16}$/.test(n))
-      )
-        throw new Error("Tên đăng nhập 3–16 ký tự: chữ không dấu, số, _");
-      if (String(t || "").length < 6)
-        throw new Error("Mật khẩu ít nhất 6 ký tự");
+      n = String(n || "").trim();
+      t = String(t || "").trim();
+      if (!n) throw new Error("Vui lòng nhập tên tài khoản");
+      if (!t) throw new Error("Vui lòng nhập mật khẩu");
+
       const e = await Promise.race([
-        v0((a) =>
-          A === "up"
-            ? a.auth.signUp({ email: n + Zr, password: t })
-            : a.auth.signInWithPassword({ email: n + Zr, password: t }),
-        ),
+        serverLogin(n, t),
         new Promise((a, i) =>
           setTimeout(
             () =>
               i(
                 new Error("Máy chủ không phản hồi — kiểm tra mạng rồi bấm lại"),
               ),
-            2e4,
+            15000,
           ),
         ),
       ]);
+      if (e.error) throw e.error;
       if (!e.data || !e.data.session)
-        throw new Error(
-          'Supabase đang bật "Confirm email" — hãy tắt (xem HUONG_DAN_WEB.txt)',
-        );
+        throw new Error("Không thể đăng nhập máy chủ");
       ((k.user = e.data.session.user), Pe());
     },
     $b = function () {
@@ -94841,14 +95164,14 @@ body.ngate-on #csel{display:none}
       J(
         `<div class="ng2">
       <div class="t" style="${j1(0, 5, 308, 22)}">Xác nhận tên tài khoản</div>
-      <label class="l" for="ngU" style="${j1(6, 53, 68, 24)}">Tài khoản:</label><input id="ngU" style="${j1(74, 55, 210, 20)}" maxlength="16" autocomplete="username" autocapitalize="off" spellcheck="false" value="${D(t)}">
+      <label class="l" for="ngU" style="${j1(6, 53, 68, 24)}">Tài khoản:</label><input id="ngU" style="${j1(74, 55, 210, 20)}" maxlength="64" autocomplete="username" autocapitalize="off" spellcheck="false" value="${D(t)}">
       <label class="l" for="ngP" style="${j1(6, 91, 68, 24)}">Mật mã:</label><input id="ngP" style="${j1(74, 93, 210, 20)}" type="password" maxlength="64" autocomplete="current-password">
       <button type="button" class="cb" id="ngShow" style="${j1(73, 123, 18, 20)}" aria-label="Hiện mật mã"></button><span class="cl" data-cb="ngShow" style="${j1(91, 123, 80, 20)}">Hiện mật mã</span>
       <button type="button" class="cb${t ? " on" : ""}" id="ngRem" style="${j1(173, 123, 18, 20)}" aria-label="Nhớ tài khoản"></button><span class="cl" data-cb="ngRem" style="${j1(191, 123, 110, 20)}">Nhớ tài khoản</span>
       <button type="button" class="b" id="ngIn" style="${j1(7, 167, 144, 23)}">Đăng nhập</button>
       <button type="button" class="b" id="ngUp" style="${j1(157, 167, 144, 23)}">Đăng ký</button>
     </div>
-    <div class="ng2x">Một tài khoản dùng cho 3 nhân vật · tên 3–16 ký tự không dấu · mật mã ít nhất 6 ký tự.<br>Nhớ mật mã — hiện chưa có cách lấy lại.${n}</div>`,
+    <div class="ng2x">Một tài khoản dùng cho 3 nhân vật. Có thể nhập tài khoản và mật mã bất kỳ.<br>Nếu chưa có trong hệ thống sẽ tự động tạo mới tài khoản.${n}</div>`,
         () => {
           const e = (o) =>
             t1(
@@ -94859,7 +95182,6 @@ body.ngate-on #csel{display:none}
                   u("#ngRem").classList.contains("on")
                     ? String(u("#ngU").value || "")
                         .trim()
-                        .toLowerCase()
                     : null,
                 ),
                 Nb()
@@ -95270,10 +95592,10 @@ body.ngate-on #csel{display:none}
     Kb = async function (A) {
       if (!k.user) {
         A.innerHTML = `<div class="card"><b>Đăng nhập / Đăng ký</b><p class="dim small">Một tài khoản dùng cho cả 3 nhân vật: lưu đám mây, bảng xếp hạng, gửi thư, Chợ. Không cần email.</p>
-      <div class="row">Tên đăng nhập <input id="naU" maxlength="16" autocomplete="username" placeholder="chữ không dấu, số, _"></div>
-      <div class="row">Mật khẩu <input id="naP" type="password" maxlength="64" autocomplete="current-password" placeholder="ít nhất 6 ký tự"></div>
+      <div class="row">Tên đăng nhập <input id="naU" maxlength="64" autocomplete="username" placeholder="tên tài khoản bất kỳ"></div>
+      <div class="row">Mật khẩu <input id="naP" type="password" maxlength="64" autocomplete="current-password" placeholder="mật khẩu"></div>
       <div class="btnrow"><button class="btn" id="naIn">Đăng nhập</button><button class="btn" id="naUp">Đăng ký mới</button></div>
-      <p class="dim small">Nhớ mật khẩu — hiện chưa có cách lấy lại.</p></div>`;
+      <p class="dim small">Có thể nhập tài khoản và mật mã bất kỳ. Nếu chưa có sẽ tự động tạo mới.</p></div>`;
         const i = (o) =>
           t1(
             u(o === "up" ? "#naUp" : "#naIn"),
@@ -95914,7 +96236,9 @@ body.ngate-on #csel{display:none}
       const s = window.CHAT_CFG || {};
       return !!(s.url && s.key) && !Xb;
     },
-    Ao = () => (k.user && k.user.email ? k.user.email.replace(Zr, "") : ""),
+    Ao = () =>
+      (k.user && k.user.username) ||
+      (k.user && k.user.email ? k.user.email.replace(Zr, "") : ""),
     Ub = (s) => {
       const A =
         (s && (s.message || s.error_description)) || String(s || "Lỗi mạng");
@@ -97082,7 +97406,8 @@ body.ngate-on #csel{display:none}
     },
     un = !0;
   un && document.documentElement.classList.add("ptclosed");
-  var L = {
+
+var L = {
       off: un,
       pid: null,
       me: null,
@@ -98831,6 +99156,7 @@ body.ngate-on #csel{display:none}
     Bh = function () {
       const A = u("#u20zn");
       if (!A || !r.fac) return;
+      const isActuallyTown = c.town && (!c.curZone || c.curZone.id === "town" || c.curZone.id === 37 || (H0.town && c.curZone.id === H0.town.id));
       const n =
         c.tower && typeof on < "u"
           ? `${on.n} · tầng ${c.tower.floor}`
@@ -98840,15 +99166,17 @@ body.ngate-on #csel{display:none}
               : c.dg.d
                 ? c.dg.d.n
                 : "Phó bản"
-            : c.town
+            : isActuallyTown
               ? (H0.town && H0.town.n) || "Thành thị"
-              : (() => {
-                  const t = dA(Math.min(r.stage, l0)),
-                    e = B0[t],
-                    a = Hn[t],
-                    i = (r.zalt || {})[t] || 0;
-                  return ((a && i && a[i - 1]) || e).n;
-                })();
+              : c.curZone && c.curZone.n
+                ? c.curZone.n
+                : (() => {
+                    const t = dA(Math.min(r.stage, l0)),
+                      e = B0[t],
+                      a = Hn[t],
+                      i = (r.zalt || {})[t] || 0;
+                    return ((a && i && a[i - 1]) || e).n;
+                  })();
       A.textContent !== n && (A.textContent = n);
     },
     Fy = function s(A) {
@@ -98883,6 +99211,8 @@ body.ngate-on #csel{display:none}
       const a = n.querySelector(".zrow.cur");
       a && !A && a.scrollIntoView({ block: "center" });
       const i = (o) => {
+        if (c.town && typeof E1 === "function") E1();
+        c.town = !1;
         ((r.mode === "quest" || r.mode === "dg") &&
           ((r.mode = "farm"),
           M("⚔ Chọn bãi luyện công: chuyển sang chế độ Luyện công.")),
@@ -98890,7 +99220,9 @@ body.ngate-on #csel{display:none}
           fn(o, "Chọn bãi luyện công"),
           B(),
           F(),
-          n.classList.add("hidden"));
+          n.classList.add("hidden"),
+          u("#u20zone") && u("#u20zone").style.removeProperty("z-index"));
+        Bh();
       };
       (n
         .querySelectorAll(".zrow")
@@ -98899,16 +99231,31 @@ body.ngate-on #csel{display:none}
           (o) =>
             (o.onclick = () => {
               const [l, d] = o.dataset.za.split(":").map(Number);
-              (((r.zalt || (r.zalt = {}))[l] = d),
-                dA(Math.min(r.stage, l0)) === l
-                  ? ((r.wave = 1),
-                    (c.enemies = []),
-                    (c.spawnT = 0.3),
-                    (c.zoneShown = null))
-                  : i(l),
-                B(),
-                F(),
-                s(!0));
+              (r.zalt || (r.zalt = {}))[l] = d;
+              if (c.town && typeof E1 === "function") E1();
+              c.town = !1;
+              (r.mode === "quest" || r.mode === "dg") &&
+                ((r.mode = "farm"),
+                M("⚔ Chọn bãi luyện công: chuyển sang chế độ Luyện công."));
+              r.autoMap = !1;
+              if (dA(Math.min(r.stage, l0)) === l) {
+                r.wave = 1;
+                c.enemies = [];
+                c.corpses = [];
+                c.spawnT = 0.3;
+                c.zoneShown = null;
+                const targetZone = V0(Math.min(r.stage, l0));
+                vn(targetZone);
+                c.banner = { t: 2.2, text: targetZone.n, sub: `Cấp ${targetZone.lo}–${targetZone.hi}` };
+                M(`🗺 Chọn bãi luyện công: tới <b>${D(targetZone.n)}</b>`);
+                Bh();
+                B();
+                F();
+                n.classList.add("hidden");
+                u("#u20zone") && u("#u20zone").style.removeProperty("z-index");
+              } else {
+                i(l);
+              }
             }),
         ),
         (u("#u20za").onchange = (o) => {
@@ -99446,6 +99793,17 @@ body.ngate-on #csel{display:none}
       (Ih(), v3());
     },
     vn = function (A) {
+      if (A) {
+        c.curZone = A;
+        if (c.town && A.id !== "town" && A.id !== 37 && (!H0.town || A.id !== H0.town.id)) {
+          c.town = !1;
+          const tb = document.getElementById("townBar");
+          if (tb) tb.classList.add("hidden");
+          if (typeof wd !== "undefined") c.tpCd = wd;
+        }
+        const znEl = document.getElementById("u20zn");
+        if (znEl && A.n && znEl.textContent !== A.n) znEl.textContent = A.n;
+      }
       (Te(A.id), ([b.x, b.y] = K0(b.x, b.y)));
       for (const n of c.enemies) [n.x, n.y] = K0(n.x, n.y);
       for (const n of c.ground) [n.x, n.y] = K0(n.x, n.y);
@@ -99871,7 +100229,8 @@ body.ngate-on #csel{display:none}
   (bo(),
     window.addEventListener("orientationchange", () => setTimeout(bo, 50)),
     window.addEventListener("resize", bo));
-  var x8 = 1 / 60,
+
+var x8 = 1 / 60,
     zh = 10,
     wk = 120,
     Q2 = 0,
@@ -99951,6 +100310,126 @@ body.ngate-on #csel{display:none}
         } catch {}
         try {
           window.heroPos = b;
+        } catch {}
+        try {
+          window.lookupZoneById = (idOrBg) => {
+            if (idOrBg == null) return null;
+            const targetStr = String(idOrBg).trim();
+            const targetNum = Number(targetStr);
+            const allZones = [];
+            if (typeof JW !== "undefined") {
+              if (Array.isArray(JW.zones)) allZones.push(...JW.zones);
+              if (JW.zalt) {
+                Object.values(JW.zalt).forEach((arr) => {
+                  if (Array.isArray(arr)) allZones.push(...arr);
+                });
+              }
+            }
+            if (typeof H0 !== "undefined") {
+              if (Array.isArray(H0.zones)) allZones.push(...H0.zones);
+              if (H0.zalt) {
+                Object.values(H0.zalt).forEach((arr) => {
+                  if (Array.isArray(arr)) allZones.push(...arr);
+                });
+              }
+            }
+            if (typeof B0 !== "undefined" && Array.isArray(B0)) {
+              allZones.push(...B0);
+            }
+            return allZones.find(
+              (z) =>
+                z &&
+                (String(z.id) === targetStr ||
+                  (Number.isFinite(targetNum) && z.id === targetNum) ||
+                  (z.bg && (z.bg === targetStr || z.bg.includes(`/${targetStr}.jpg`))))
+            );
+          };
+
+          window.getHeroCurrentMap = () => {
+            try {
+              if (typeof c !== "undefined" && c) {
+                const isActuallyTown = c.town && (!c.curZone || c.curZone.id === "town" || c.curZone.id === 37 || (typeof H0 !== "undefined" && H0.town && c.curZone.id === H0.town.id));
+                if (isActuallyTown) {
+                  const townId = (typeof H0 !== "undefined" && H0.town && H0.town.id) ? `town_${H0.town.id}` : "town";
+                  const townName = (typeof H0 !== "undefined" && H0.town && H0.town.n) ? H0.town.n : "Thành thị";
+                  return { mapId: String(townId), mapName: townName };
+                }
+                if (c.tower) {
+                  const floor = c.tower.floor || 1;
+                  const towerName = (typeof on !== "undefined" && on && on.n) ? on.n : "Thiên Tầng Tháp";
+                  return { mapId: `tower_${floor}`, mapName: `${towerName} · tầng ${floor}` };
+                }
+                if (c.dg) {
+                  if (c.dg.kind === "boat") {
+                    return { mapId: "boat", mapName: "Phong Lăng Độ" };
+                  }
+                  const dgName = (c.dg.d && c.dg.d.n) || "Phó bản";
+                  const dgId = (c.dg.d && c.dg.d.id) ? `dg_${c.dg.d.id}` : (c.dg.kind ? `dg_${c.dg.kind}` : "dg");
+                  return { mapId: String(dgId), mapName: dgName };
+                }
+
+                // 1. Kiểm tra c.curZone được gán trực tiếp khi gọi vn(A)
+                if (c.curZone && (c.curZone.id != null || c.curZone.n)) {
+                  const zid = c.curZone.id != null ? String(c.curZone.id) : (c.curZone.n || "field");
+                  let zname = c.curZone.n;
+                  if (!zname && window.lookupZoneById) {
+                    const found = window.lookupZoneById(zid);
+                    if (found && found.n) zname = found.n;
+                  }
+                  return {
+                    mapId: zid,
+                    mapName: zname || `Bản đồ ${zid}`,
+                  };
+                }
+
+                // 2. Tra cứu từ ảnh nền c.bgImg (nền canvas đang vẽ)
+                if (c.bgImg && c.bgImg.src) {
+                  const match = String(c.bgImg.src).match(/\/(\d+)\.jpg/);
+                  if (match) {
+                    const bgId = match[1];
+                    const found = window.lookupZoneById ? window.lookupZoneById(bgId) : null;
+                    if (found) {
+                      return {
+                        mapId: String(found.id != null ? found.id : bgId),
+                        mapName: found.n || `Bản đồ ${bgId}`,
+                      };
+                    }
+                    return { mapId: String(bgId), mapName: `Bản đồ ${bgId}` };
+                  }
+                }
+
+                // 3. Tra cứu từ c.zoneShown
+                if (c.zoneShown != null) {
+                  const found = window.lookupZoneById ? window.lookupZoneById(c.zoneShown) : null;
+                  if (found) {
+                    return {
+                      mapId: String(found.id),
+                      mapName: found.n || String(found.id),
+                    };
+                  }
+                }
+              }
+
+              // 4. Tra cứu từ V0(r.stage)
+              if (typeof V0 === "function" && typeof r !== "undefined" && r && typeof l0 !== "undefined") {
+                const z = V0(Math.min(r.stage || 1, l0));
+                if (z) {
+                  return {
+                    mapId: String(z.id != null ? z.id : (z.n || "field")),
+                    mapName: z.n || String(z.id || "Dã Ngoại"),
+                  };
+                }
+              }
+            } catch (err) {}
+
+            const el = document.getElementById("u20zn");
+            if (el && el.textContent && el.textContent.trim()) {
+              const t = el.textContent.trim();
+              return { mapId: t, mapName: t };
+            }
+
+            return { mapId: "default", mapName: "Tân Thủ Thôn" };
+          };
         } catch {}
         try {
           window.getHeroLookData = () => {
@@ -100093,6 +100572,90 @@ body.ngate-on #csel{display:none}
             const isSelected = window.__volamidleOnline && window.__volamidleOnline.state && window.__volamidleOnline.state.selectedTargetId === oth.userId;
             const nameColor = isSelected ? "#ff6b81" : oth.fac ? (typeof m0 < "u" && typeof I < "u" && I[oth.fac] && m0[I[oth.fac].series]) || "#7fe36a" : "#7fe36a";
 
+            // 6.1. HIỆU ỨNG VÒNG TRÒN TARGET VÕ LÂM DƯỚI CHÂN & MŨI TÊN MỤC TIÊU TRÊN ĐẦU
+            if (isSelected) {
+              ctx.save();
+              const nowSec = performance.now() / 1000;
+              const pulse = 0.5 + 0.5 * Math.sin(nowSec * 5.5);
+
+              // 1. Vòng tròn hào quang đỏ rực nhấp nháy phát sáng
+              const rx = 24 + pulse * 4;
+              const ry = 9 + pulse * 1.5;
+              ctx.strokeStyle = "#ff3838";
+              ctx.lineWidth = 2.5;
+              ctx.shadowColor = "#ff3838";
+              ctx.shadowBlur = 14;
+              ctx.beginPath();
+              ctx.ellipse(x, y, rx, ry, 0, 0, Math.PI * 2);
+              ctx.stroke();
+
+              // 2. Trận pháp Bát Quái xoay tròn theo thời gian
+              ctx.save();
+              ctx.translate(x, y);
+              ctx.scale(1, 0.4);
+              ctx.rotate(nowSec * 2.2);
+              ctx.strokeStyle = "rgba(255, 71, 87, 0.85)";
+              ctx.lineWidth = 2;
+              ctx.setLineDash([8, 6]);
+              ctx.beginPath();
+              ctx.arc(0, 0, 28, 0, Math.PI * 2);
+              ctx.stroke();
+              ctx.restore();
+
+              // 3. 4 Góc hồng tâm nhắm mục tiêu [ ] co giãn
+              const bDist = 26 - pulse * 3;
+              const bLen = 8;
+              ctx.strokeStyle = "#ffeaa7";
+              ctx.lineWidth = 2.2;
+              ctx.shadowColor = "#ffd32a";
+              ctx.shadowBlur = 9;
+
+              // Trên-trái
+              ctx.beginPath();
+              ctx.moveTo(x - bDist, y - 8 + bLen);
+              ctx.lineTo(x - bDist, y - 8);
+              ctx.lineTo(x - bDist + bLen, y - 8);
+              ctx.stroke();
+              // Trên-phải
+              ctx.beginPath();
+              ctx.moveTo(x + bDist - bLen, y - 8);
+              ctx.lineTo(x + bDist, y - 8);
+              ctx.lineTo(x + bDist, y - 8 + bLen);
+              ctx.stroke();
+              // Dưới-trái
+              ctx.beginPath();
+              ctx.moveTo(x - bDist, y + 8 - bLen);
+              ctx.lineTo(x - bDist, y + 8);
+              ctx.lineTo(x - bDist + bLen, y + 8);
+              ctx.stroke();
+              // Dưới-phải
+              ctx.beginPath();
+              ctx.moveTo(x + bDist - bLen, y + 8);
+              ctx.lineTo(x + bDist, y + 8);
+              ctx.lineTo(x + bDist, y + 8 - bLen);
+              ctx.stroke();
+
+              // 4. Mũi tên đỏ chỉ từ trên đầu đối thủ xuống
+              const arrowY = pY - 26 + Math.sin(nowSec * 6) * 4;
+              ctx.fillStyle = "#ff4757";
+              ctx.strokeStyle = "#ffffff";
+              ctx.lineWidth = 1.5;
+              ctx.shadowColor = "#ff4757";
+              ctx.shadowBlur = 10;
+              ctx.beginPath();
+              ctx.moveTo(x, arrowY + 9);
+              ctx.lineTo(x - 7, arrowY - 3);
+              ctx.lineTo(x - 2.5, arrowY - 3);
+              ctx.lineTo(x - 2.5, arrowY - 11);
+              ctx.lineTo(x + 2.5, arrowY - 11);
+              ctx.lineTo(x + 2.5, arrowY - 3);
+              ctx.lineTo(x + 7, arrowY - 3);
+              ctx.closePath();
+              ctx.fill();
+              ctx.stroke();
+              ctx.restore();
+            }
+
             if (typeof zs == "function") {
               zs(
                 x,
@@ -100102,7 +100665,7 @@ body.ngate-on #csel{display:none}
                 11,
                 (oth.hp || 100) / Math.max(1, oth.maxHp || 100),
                 "#5fd35a",
-                isSelected ? "«Mục tiêu»" : "",
+                isSelected ? "«Mục tiêu PK»" : "",
                 isSelected ? "#ff4757" : ""
               );
             }
@@ -100112,7 +100675,7 @@ body.ngate-on #csel{display:none}
         } catch {}
         try {
           window.triggerGameSkillFx = (attackerPos, targetPos, skillId) => {
-            if (typeof Rs != "function") return;
+            if (typeof Rs != "function") return false;
             const skId = skillId || (c && c.P && c.P.main && c.P.main.id) || 10;
             const ax = Number.isFinite(attackerPos.x) ? attackerPos.x : 160;
             const ay = Number.isFinite(attackerPos.y) ? attackerPos.y : 180;
@@ -100135,7 +100698,10 @@ body.ngate-on #csel{display:none}
               if (typeof Rc == "function" && skId) {
                 try { Rc(skId); } catch {}
               }
-            } catch (err) {}
+              return true;
+            } catch (err) {
+              return false;
+            }
           };
           window.getCurrentHeroSkillId = () => {
             if (c && c.P && c.P.main) {
@@ -100150,4 +100716,5 @@ body.ngate-on #csel{display:none}
   GMToolInit();
   var Mo = 544;
   setInterval(gk, 300 * 1e3);
+
 })();

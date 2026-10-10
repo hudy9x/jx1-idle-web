@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "node server/server.js",
-    "test": "node server/tests/run.js"
+    "build": "node tools/build.js",
+    "test": "node server/tests/monsters.test.js && node server/tests/saves.test.js && node server/tests/run.js"
   },
   "dependencies": {
     "prettier": "^3.9.9",

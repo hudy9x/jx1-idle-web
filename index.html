@@ -19,7 +19,13 @@
   <header id="top">
     <div class="lvbox"><span id="lv">1</span></div>
     <div class="topmid">
-      <div class="row"><b id="heroName">Võ Lâm Idle</b><span id="stageLbl"></span></div>
+      <div class="row">
+        <b id="heroName">Võ Lâm Idle</b>
+        <span style="display:flex;align-items:center;gap:6px;">
+          <span id="stageLbl"></span>
+          <span id="mpMapBadge" title="Bấm để xem hiệp khách trên bản đồ" style="display:none;cursor:pointer;background:#1e382b;border:1px solid #2ed573;color:#7bed9f;font-size:10px;padding:1px 6px;border-radius:10px;white-space:nowrap;user-select:none;">👥 <b id="mpMapBadgeCount">1</b></span>
+        </span>
+      </div>
     </div>
     <button id="ktcBtn" title="Kỳ Trân Các">Kỳ Trân Các</button>
     <div class="gold"><span class="coin"></span><span id="gold">0</span><img class="knbi" src="img/ep/knb.png" alt=""><span id="knbTop">0</span></div>
@@ -83,43 +89,38 @@
   <div id="toast" role="status" aria-live="polite"></div>
 </div>
 
-<div id="mpPanel" style="position:fixed;right:16px;top:72px;z-index:9999;width:270px;background:rgba(9,16,18,0.95);border:1px solid rgba(255,215,106,0.35);border-radius:10px;padding:10px;color:#fff;font:12px/1.4 sans-serif;box-shadow:0 12px 28px rgba(0,0,0,0.55);backdrop-filter:blur(6px);">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:6px;">
-    <div style="font-weight:700;color:#ffd76a;display:flex;align-items:center;gap:6px;">
-      <span>⚔️ Giang Hồ Online</span>
-      <span id="mpBadge" style="font-size:10px;background:#2d7a46;color:#fff;padding:1px 6px;border-radius:10px;">1 online</span>
-    </div>
-    <button id="mpToggle" style="background:none;border:none;color:#aaa;cursor:pointer;font-size:15px;padding:0 4px;font-weight:bold;" title="Thu gọn / Mở rộng">−</button>
-  </div>
-  <div id="mpContent">
-    <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center;">
-      <span style="color:#aaa;font-size:11px;">Tên:</span>
-      <input id="mpName" type="text" value="" placeholder="Tên nhân vật" style="flex:1;box-sizing:border-box;padding:4px 8px;border-radius:5px;border:1px solid #3e4a4c;background:#0d171b;color:#ffd76a;font-size:12px;font-weight:700;" />
-    </div>
-    <div id="mpStatus" style="color:#a8f0bf;font-size:11px;min-height:16px;margin-bottom:6px;">Đang kết nối máy chủ...</div>
-    <div id="mpBossBox" style="margin-bottom:8px;padding:6px 8px;border-radius:6px;background:rgba(255,184,75,0.08);border:1px solid rgba(255,184,75,0.4);font-size:11px;">
-      <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><strong id="mpBossName" style="color:#ffb84b;">Boss Thế Giới</strong><span id="mpBossHpTxt" style="color:#ffd76a;">100%</span></div>
-      <div style="background:#222;height:6px;border-radius:3px;overflow:hidden;margin-bottom:6px;"><div id="mpBossBar" style="background:linear-gradient(90deg,#ff4757,#ffa502);height:100%;width:100%;transition:width .2s;"></div></div>
-      <div style="display:flex;gap:6px;">
-        <button id="mpBossAttack" style="flex:1;padding:5px 6px;border:none;border-radius:5px;background:#ff9f43;color:#121212;font-weight:700;font-size:11px;cursor:pointer;">Đánh Boss</button>
-        <button id="mpPvpAttack" style="flex:1;padding:5px 6px;border:none;border-radius:5px;background:#d95f5f;color:#fff;font-weight:700;font-size:11px;cursor:pointer;">Tỷ thí PvP</button>
-      </div>
-    </div>
-    <div style="display:flex;justify-content:space-between;font-weight:700;font-size:11px;color:#d9f5d6;margin-bottom:4px;">
-      <span>Hiệp khách trong Server</span>
-    </div>
-    <ul id="mpPlayers" style="margin:0 0 8px;padding-left:14px;max-height:110px;overflow-y:auto;color:#d9f5d6;font-size:11px;"></ul>
-    <div style="font-weight:700;font-size:11px;color:#85c1e9;margin-bottom:4px;">Kênh Chat Thế Giới</div>
-    <ul id="mpChat" style="margin:0 0 6px;padding-left:14px;max-height:90px;overflow-y:auto;color:#dfe9ef;font-size:11px;background:rgba(0,0,0,0.25);border-radius:4px;padding:4px 6px 4px 18px;"></ul>
-    <div style="display:flex;gap:6px;">
-      <input id="mpChatInput" type="text" placeholder="Nhắn tin toàn server..." style="flex:1;padding:5px 8px;border-radius:5px;border:1px solid #3e4a4c;background:#0d171b;color:#fff;font-size:11px;" />
-      <button id="mpChatSend" style="padding:5px 10px;border:none;border-radius:5px;background:#3498db;color:#fff;cursor:pointer;font-size:11px;font-weight:700;">Gửi</button>
-    </div>
-  </div>
-</div>
 <script src="data.js?v=545"></script>
 <script src="setvi.js?v=545"></script>
-<script src="app.js?v=545"></script>
+
+<!-- === BẢNG DỮ LIỆU TĨNH === -->
+<script src="src/data/item-sets.js"></script>
+<script src="src/data/equipment-ge.js"></script>
+<script src="src/data/monsters-zones.js"></script>
+<script src="src/data/sound-effects.js"></script>
+<script src="src/data/skills-jmo.js"></script>
+
+<!-- === LÕI TOÁN HỌC & THUỘC TÍNH === -->
+<script src="src/core/helpers.js"></script>
+<script src="src/core/attributes.js"></script>
+
+<!-- === HỆ THỐNG CHIẾN ĐẤU & CHIÊU THỨC === -->
+<script src="src/combat/skills.js"></script>
+<script src="src/combat/battle.js"></script>
+
+<!-- === ĐỒ HỌA & DỰNG HÌNH === -->
+<script src="src/render/arena.js"></script>
+<script src="src/render/jxlook.js"></script>
+
+<!-- === GIAO DIỆN NGƯỜI DÙNG === -->
+<script src="src/ui/hud.js"></script>
+<script src="src/ui/inventory.js"></script>
+
+<!-- === HỆ THỐNG PHỤ TRỢ & MULTIPLAYER === -->
+<script src="src/systems/saves-backend.js"></script>
+<script src="src/systems/quests-boss.js"></script>
+<script src="src/systems/storage-ui.js"></script>
+<script src="src/systems/gm-tool.js"></script>
+
 <script src="/multiplayer.js"></script>
 <!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "6e9868fbdfd94f218303eef9b584d758"}'></script><!-- Cloudflare Pages Analytics --></body>
 </html>

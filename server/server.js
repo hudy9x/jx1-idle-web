@@ -2,13 +2,45 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const crypto = require('crypto');
+const { createMonsterWorld } = require('./monsters');
+const { createSaveStore, handleSavesRequest } = require('./saves');
 
 const PORT = process.env.PORT || 3000;
 const ROOT = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT, 'server', 'data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
+const SESSIONS_FILE = path.join(DATA_DIR, 'sessions.json');
 
-const sessionMap = new Map(); // token -> userId
+function loadSessions() {
+  ensureDataDir();
+  if (!fs.existsSync(SESSIONS_FILE)) {
+    return new Map();
+  }
+  try {
+    const raw = fs.readFileSync(SESSIONS_FILE, 'utf8');
+    const parsed = JSON.parse(raw);
+    const map = new Map();
+    if (parsed && typeof parsed === 'object') {
+      for (const [k, v] of Object.entries(parsed)) {
+        map.set(k, v);
+      }
+    }
+    return map;
+  } catch (error) {
+    return new Map();
+  }
+}
+
+function saveSessions() {
+  ensureDataDir();
+  const obj = {};
+  for (const [k, v] of sessionMap.entries()) {
+    obj[k] = v;
+  }
+  fs.writeFileSync(SESSIONS_FILE, JSON.stringify(obj, null, 2));
+}
+
+const sessionMap = loadSessions(); // token -> userId
 const users = loadUsers();
 
 // === GLOBAL WORLD STATE (MỘT SERVER DUY NHẤT) ===
@@ -24,6 +56,10 @@ const globalBoss = {
   lastHitBy: '',
   respawning: false,
 };
+
+// === QUÁI TRÊN BẢN ĐỒ (SERVER LÀ NGUỒN SỰ THẬT) ===
+const monsterWorld = createMonsterWorld();
+const MONSTER_TICK_MS = 100;
 
 function generateId(prefix) {
   return `${prefix}_${crypto.randomBytes(6).toString('hex')}`;
@@ -58,6 +94,20 @@ function sanitizeText(value, fallback = '') {
   return text.slice(0, 32) || fallback;
 }
 
+function isTownSafeZone(mapId, mapName) {
+  const id = String(mapId || '').toLowerCase().trim();
+  const name = String(mapName || '').toLowerCase().trim();
+  return (
+    id === 'town' ||
+    id === '37' ||
+    id.startsWith('town_') ||
+    name.includes('biện kinh') ||
+    name.includes('bien kinh') ||
+    name.includes('thành thị') ||
+    name.includes('thanh thi')
+  );
+}
+
 function buildDefaultProfile(userId, username) {
   return {
     userId,
@@ -86,16 +136,24 @@ function buildDefaultProfile(userId, username) {
   };
 }
 
-function pushWorldMessage(text, author = 'Hệ thống') {
+function pushWorldMessage(text, author = 'Hệ thống', extra = {}) {
+  const cleanText = String(text || '').slice(0, 200);
   const msg = {
-    id: generateId('msg'),
+    id: extra.id || generateId('msg'),
+    cid: extra.cid || extra.userId || '',
+    userId: extra.userId || extra.cid || '',
     name: sanitizeText(author, 'Hệ thống'),
-    text: String(text || '').slice(0, 160),
-    ts: Date.now(),
+    fac: sanitizeText(extra.fac || '', ''),
+    lvl: Number(extra.lvl || extra.level) || 0,
+    text: cleanText,
+    msg: cleanText,
+    item: extra.item || null,
+    ts: extra.ts || Date.now(),
+    sys: extra.sys !== undefined ? !!extra.sys : author === 'Hệ thống',
   };
   globalMessages.push(msg);
-  if (globalMessages.length > 50) {
-    globalMessages.splice(0, globalMessages.length - 50);
+  if (globalMessages.length > 80) {
+    globalMessages.splice(0, globalMessages.length - 80);
   }
   broadcast({ type: 'chat', message: msg });
   return msg;
@@ -137,7 +195,7 @@ function sendJson(res, statusCode, payload) {
   res.writeHead(statusCode, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,POST,PUT,OPTIONS',
+    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type,Authorization',
   });
   res.end(JSON.stringify(payload));
@@ -239,6 +297,8 @@ function handleWsMessage(client, message) {
           sex: Number(data.sex) || 0,
           look: data.look || null,
           auras: data.auras || [],
+          mapId: data.mapId != null ? String(data.mapId) : 'default',
+          mapName: sanitizeText(data.mapName, 'Võ Lâm'),
           status: 'online',
           lastSeen: Date.now(),
         };
@@ -272,6 +332,8 @@ function handleWsMessage(client, message) {
           sex: Number(data.sex) || 0,
           look: data.look || null,
           auras: data.auras || [],
+          mapId: data.mapId != null ? String(data.mapId) : 'default',
+          mapName: sanitizeText(data.mapName, 'Võ Lâm'),
           status: 'online',
           lastSeen: Date.now(),
         };
@@ -279,6 +341,7 @@ function handleWsMessage(client, message) {
       } else {
         if (data.name) player.name = sanitizeText(data.name, player.name);
         if (data.hp !== undefined) player.hp = Number(data.hp);
+        if (data.maxHp !== undefined) player.maxHp = Number(data.maxHp);
         if (data.level !== undefined) player.level = Number(data.level);
         if (data.gold !== undefined) player.gold = Number(data.gold);
         if (data.x !== undefined) player.x = Number(data.x);
@@ -290,6 +353,8 @@ function handleWsMessage(client, message) {
         if (data.sex !== undefined) player.sex = Number(data.sex);
         if (data.look !== undefined) player.look = data.look;
         if (data.auras !== undefined) player.auras = data.auras;
+        if (data.mapId !== undefined) player.mapId = String(data.mapId);
+        if (data.mapName !== undefined) player.mapName = sanitizeText(data.mapName, player.mapName || 'Võ Lâm');
         if (data.status) player.status = String(data.status);
         player.lastSeen = Date.now();
       }
@@ -309,6 +374,8 @@ function handleWsMessage(client, message) {
           sex: player.sex,
           look: player.look,
           auras: player.auras,
+          mapId: player.mapId,
+          mapName: player.mapName,
           hp: player.hp,
           maxHp: player.maxHp,
           level: player.level,
@@ -319,11 +386,33 @@ function handleWsMessage(client, message) {
     }
 
     if (data.type === 'chat') {
-      const text = String(data.text || '').trim();
+      const text = String(data.text || data.msg || '').trim();
       if (!text) return;
       const player = globalPlayers.get(client.userId);
       const name = player ? player.name : data.name || 'Vô Danh';
-      pushWorldMessage(text, name);
+      const fac = player ? player.fac : data.fac || '';
+      const lvl = player ? player.level : Number(data.lvl || data.level) || 0;
+      pushWorldMessage(text, name, {
+        cid: client.userId || data.cid || '',
+        userId: client.userId || data.userId || '',
+        fac,
+        lvl,
+        item: data.item || null,
+      });
+      return;
+    }
+
+    if (data.type === 'mon_hit') {
+      const player = globalPlayers.get(client.userId);
+      if (!player || player.status === 'offline' || !Array.isArray(data.hits)) return;
+      const mapId = String(player.mapId);
+      for (const entry of data.hits.slice(0, 32)) {
+        if (!Array.isArray(entry)) continue;
+        const result = monsterWorld.hit(mapId, entry[0], entry[1], client.userId);
+        if (result && result.killed && result.monster.cls === 'boss') {
+          pushWorldMessage(`⚔️ ${player.name} đã hạ boss ${result.zone.n}!`, 'Hệ thống');
+        }
+      }
       return;
     }
 
@@ -355,15 +444,64 @@ function handleWsMessage(client, message) {
       const attacker = globalPlayers.get(client.userId) || { name: data.name || 'Hiệp Khách', level: 1 };
       const targetUserId = String(data.targetUserId || '');
       const target = globalPlayers.get(targetUserId);
+
+      // Kiểm tra khu vực an toàn Biện Kinh (Cấm PK)
+      if (
+        isTownSafeZone(attacker.mapId, attacker.mapName) ||
+        (target && isTownSafeZone(target.mapId, target.mapName))
+      ) {
+        return;
+      }
+
       if (target && target.userId !== client.userId) {
-        const damage = Math.max(6, Math.round((attacker.level || 1) * 6 + Math.random() * 12));
-        target.hp = Math.max(0, Number(target.hp || 100) - damage);
+        let damage = Number(data.damage);
+        if (!Number.isFinite(damage) || damage <= 0) {
+          damage = Math.max(6, Math.round((attacker.level || 1) * 6 + Math.random() * 12));
+        }
+        damage = Math.round(damage);
+        target.hp = Math.max(0, Number(target.hp != null ? target.hp : (target.maxHp || 100)) - damage);
         target.status = target.hp > 0 ? 'online' : 'trọng thương';
-        pushWorldMessage(`⚔️ ${attacker.name} ra chiêu đánh trúng ${target.name} gây ${damage} sát thương!`, 'Hệ thống');
+
+        const critText = data.isCrit ? ' [Chí mạng]' : '';
+        const counterText = data.isCounter ? ' ⚡[Khắc hệ]' : '';
+        const skillName = data.skillName ? ` [${data.skillName}]` : '';
+        pushWorldMessage(`⚔️ ${attacker.name} tung${skillName} đánh trúng ${target.name} gây ${damage} sát thương${critText}${counterText}!`, 'Hệ thống');
+
         if (target.hp <= 0) {
           pushWorldMessage(`💀 ${target.name} đã bại trận dưới tay ${attacker.name}!`, 'Hệ thống');
+          // Tự động hồi sinh sau 8 giây
+          setTimeout(() => {
+            const curTgt = globalPlayers.get(targetUserId);
+            if (curTgt && curTgt.hp <= 0) {
+              curTgt.hp = curTgt.maxHp || 100;
+              curTgt.status = 'online';
+              broadcast({
+                type: 'pvp_update',
+                target: curTgt,
+                targetUserId,
+                targetHp: curTgt.hp,
+                targetMaxHp: curTgt.maxHp || 100,
+                damage: 0,
+                revived: true,
+              });
+            }
+          }, 8000);
         }
-        broadcast({ type: 'pvp_update', attacker: attacker.name, target: target, damage });
+
+        broadcast({
+          type: 'pvp_update',
+          attacker: attacker.name,
+          attackerUserId: client.userId,
+          target: target,
+          targetUserId: target.userId,
+          targetHp: target.hp,
+          targetMaxHp: target.maxHp || 100,
+          damage,
+          isCrit: !!data.isCrit,
+          isCounter: !!data.isCounter,
+          element: data.element || 'phys',
+          skillId: data.skillId,
+        });
       }
       return;
     }
@@ -382,6 +520,8 @@ function handleWsMessage(client, message) {
             targetUserId: data.targetUserId,
             skillId: data.skillId,
             fac: data.fac || player.fac || 'wudang',
+            mapId: data.mapId != null ? String(data.mapId) : player.mapId,
+            mapName: data.mapName || player.mapName,
           },
           client.socket
         );
@@ -418,7 +558,7 @@ function serveStaticFile(res, urlPath) {
   const normalized = urlPath === '/' ? '/index.html' : urlPath;
   const filePath = path.join(ROOT, normalized);
 
-  if (!filePath.startsWith(ROOT)) {
+  if (!filePath.startsWith(ROOT) || /^\/(server|\.git)(\/|$)/i.test(normalized)) {
     sendJson(res, 403, { ok: false, error: 'Forbidden' });
     return;
   }
@@ -454,20 +594,35 @@ function serveStaticFile(res, urlPath) {
   });
 }
 
-function readJsonBody(req, callback) {
+function readJsonBody(req, callback, maxBytes = 1e6) {
   let body = '';
+  let tooBig = false;
   req.on('data', (chunk) => {
+    if (tooBig) return;
     body += chunk.toString();
-    if (body.length > 1e6) req.destroy();
+    if (body.length > maxBytes) {
+      tooBig = true;
+      body = '';
+    }
   });
   req.on('end', () => {
     try {
-      callback(body ? JSON.parse(body) : {});
+      callback(tooBig ? null : body ? JSON.parse(body) : {});
     } catch (error) {
       callback({});
     }
   });
 }
+
+const saveStore = createSaveStore(path.join(DATA_DIR, 'saves'));
+
+const verifySaveToken = async (token) => {
+  if (!token) return null;
+  if (process.env.SAVES_DEV_AUTH === '1' && String(token).startsWith('dev:')) {
+    return String(token).slice(4);
+  }
+  return sessionMap.get(token) || null;
+};
 
 const server = http.createServer((req, res) => {
   const { method, url } = req;
@@ -476,6 +631,22 @@ const server = http.createServer((req, res) => {
 
   if (method === 'OPTIONS') {
     sendJson(res, 200, { ok: true });
+    return;
+  }
+
+  // === SAVE NHÂN VẬT (DB Ở BACKEND) ===
+  if (
+    handleSavesRequest({
+      req,
+      res,
+      pathname,
+      parsedUrl: parsed,
+      store: saveStore,
+      verify: verifySaveToken,
+      sendJson,
+      readBody: readJsonBody,
+    })
+  ) {
     return;
   }
 
@@ -498,6 +669,62 @@ const server = http.createServer((req, res) => {
       ok: true,
       ...getWorldSnapshot(),
     });
+    return;
+  }
+
+  // === KÊNH CHAT THẾ GIỚI NỘI BỘ ===
+  if (pathname === '/api/chat') {
+    if (method === 'GET') {
+      const limit = Math.min(100, Math.max(1, Number(parsed.searchParams.get('limit')) || 50));
+      const after = parsed.searchParams.get('after');
+      let msgs = globalMessages;
+      if (after) {
+        const idx = msgs.findIndex((m) => String(m.id) === String(after));
+        if (idx >= 0) msgs = msgs.slice(idx + 1);
+      }
+      sendJson(res, 200, {
+        ok: true,
+        messages: msgs.slice(-limit),
+        online: Math.max(1, activeSockets.size || globalPlayers.size),
+      });
+      return;
+    }
+
+    if (method === 'POST') {
+      readJsonBody(req, (body) => {
+        const text = String((body && (body.text || body.msg)) || '').trim().slice(0, 200);
+        if (!text) {
+          sendJson(res, 400, { ok: false, error: 'Tin nhắn không được để trống' });
+          return;
+        }
+
+        const user = requireAuth(req);
+        let author = (body && body.name) || (user && user.username) || 'Hiệp Khách';
+        let cid = (user && user.userId) || (body && (body.cid || body.userId)) || '';
+        let fac = (body && body.fac) || '';
+        let lvl = Number(body && (body.lvl || body.level)) || 0;
+
+        if (cid && globalPlayers.has(cid)) {
+          const p = globalPlayers.get(cid);
+          author = p.name || author;
+          fac = p.fac || fac;
+          lvl = p.level || lvl;
+        }
+
+        const msg = pushWorldMessage(text, author, {
+          cid,
+          userId: cid,
+          fac,
+          lvl,
+          item: (body && body.item) || null,
+        });
+
+        sendJson(res, 200, { ok: true, message: msg });
+      });
+      return;
+    }
+
+    sendJson(res, 405, { ok: false, error: 'Method not allowed' });
     return;
   }
 
@@ -540,17 +767,24 @@ const server = http.createServer((req, res) => {
     }
 
     readJsonBody(req, (body) => {
-      const username = sanitizeText(body.username, '');
-      const password = String(body.password || '').trim();
+      const username = String((body && body.username) || '').trim().slice(0, 64);
+      const password = String((body && body.password) || '').slice(0, 128);
 
-      if (!username || !password) {
-        sendJson(res, 400, { ok: false, error: 'username and password are required' });
+      if (!username) {
+        sendJson(res, 400, { ok: false, error: 'Vui lòng nhập tên tài khoản' });
         return;
       }
 
       const existing = Object.values(users).find((u) => u.username.toLowerCase() === username.toLowerCase());
       if (existing) {
-        sendJson(res, 409, { ok: false, error: 'username already exists' });
+        if (existing.password && existing.password !== password) {
+          sendJson(res, 409, { ok: false, error: 'Tên tài khoản đã tồn tại với mật khẩu khác' });
+          return;
+        }
+        const token = generateId('token');
+        sessionMap.set(token, existing.userId);
+        saveSessions();
+        sendJson(res, 200, { ok: true, userId: existing.userId, username: existing.username, token, profile: existing.profile });
         return;
       }
 
@@ -567,6 +801,7 @@ const server = http.createServer((req, res) => {
 
       const token = generateId('token');
       sessionMap.set(token, userId);
+      saveSessions();
       sendJson(res, 201, { ok: true, userId, username, token, profile });
     });
     return;
@@ -579,22 +814,72 @@ const server = http.createServer((req, res) => {
     }
 
     readJsonBody(req, (body) => {
-      const username = sanitizeText(body.username, '');
-      const password = String(body.password || '').trim();
+      const username = String((body && body.username) || '').trim().slice(0, 64);
+      const password = String((body && body.password) || '').slice(0, 128);
 
-      const user = Object.values(users).find(
-        (item) => item.username.toLowerCase() === username.toLowerCase() && item.password === password,
-      );
-
-      if (!user) {
-        sendJson(res, 401, { ok: false, error: 'invalid credentials' });
+      if (!username) {
+        sendJson(res, 400, { ok: false, error: 'Vui lòng nhập tên tài khoản' });
         return;
       }
 
+      const existing = Object.values(users).find(
+        (item) => item.username.toLowerCase() === username.toLowerCase(),
+      );
+
+      // 1. Nếu đã có username trong DB -> kiểm tra mật khẩu rồi đăng nhập
+      if (existing) {
+        if (existing.password && existing.password !== password) {
+          sendJson(res, 401, { ok: false, error: 'Sai mật khẩu' });
+          return;
+        }
+
+        const token = generateId('token');
+        sessionMap.set(token, existing.userId);
+        saveSessions();
+        sendJson(res, 200, {
+          ok: true,
+          userId: existing.userId,
+          username: existing.username,
+          token,
+          profile: existing.profile,
+        });
+        return;
+      }
+
+      // 2. Chưa có username trong DB -> tự động tạo mới và đăng nhập
+      const userId = generateId('user');
+      const profile = buildDefaultProfile(userId, username);
+      users[userId] = {
+        userId,
+        username,
+        password,
+        profile,
+        createdAt: Date.now(),
+      };
+      saveUsers();
+
       const token = generateId('token');
-      sessionMap.set(token, user.userId);
-      sendJson(res, 200, { ok: true, userId: user.userId, username: user.username, token, profile: user.profile });
+      sessionMap.set(token, userId);
+      saveSessions();
+      sendJson(res, 200, {
+        ok: true,
+        userId,
+        username,
+        token,
+        profile,
+        isNew: true,
+      });
     });
+    return;
+  }
+
+  if (pathname === '/api/auth/me' || pathname === '/api/me') {
+    const user = requireAuth(req);
+    if (!user) {
+      sendJson(res, 401, { ok: false, error: 'Unauthorized' });
+      return;
+    }
+    sendJson(res, 200, { ok: true, userId: user.userId, username: user.username, profile: user.profile });
     return;
   }
 
@@ -674,7 +959,11 @@ const server = http.createServer((req, res) => {
 
     readJsonBody(req, (body) => {
       const token = String(body.token || '').replace(/^Bearer\s+/i, '');
-      const user = sessionMap.has(token) ? users[sessionMap.get(token)] : null;
+      let user = sessionMap.has(token) ? users[sessionMap.get(token)] : null;
+      if (!user && body.userId && users[body.userId]) {
+        user = users[body.userId];
+        if (token) sessionMap.set(token, user.userId);
+      }
       if (!user) {
         sendJson(res, 401, { ok: false, error: 'Unauthorized' });
         return;
@@ -688,7 +977,7 @@ const server = http.createServer((req, res) => {
           userId,
           name: sanitizeText(body.name || user.username, user.username),
           hp: Number.isFinite(Number(body.hp)) ? Number(body.hp) : 100,
-          maxHp: 100,
+          maxHp: Number.isFinite(Number(body.maxHp)) ? Number(body.maxHp) : 100,
           level: Number.isFinite(Number(body.level)) ? Number(body.level) : 1,
           gold: Number.isFinite(Number(body.gold)) ? Number(body.gold) : 1000,
           x: Number.isFinite(Number(body.x)) ? Number(body.x) : 160,
@@ -700,6 +989,8 @@ const server = http.createServer((req, res) => {
           sex: Number(body.sex) || 0,
           look: body.look || null,
           auras: body.auras || [],
+          mapId: body.mapId != null ? String(body.mapId) : 'default',
+          mapName: sanitizeText(body.mapName, 'Võ Lâm'),
           status: 'online',
           lastSeen: Date.now(),
         };
@@ -707,6 +998,7 @@ const server = http.createServer((req, res) => {
       } else {
         if (body.name) player.name = sanitizeText(body.name, player.name);
         if (body.hp !== undefined) player.hp = Number(body.hp);
+        if (body.maxHp !== undefined) player.maxHp = Number(body.maxHp);
         if (body.level !== undefined) player.level = Number(body.level);
         if (body.gold !== undefined) player.gold = Number(body.gold);
         if (body.x !== undefined) player.x = Number(body.x);
@@ -718,6 +1010,8 @@ const server = http.createServer((req, res) => {
         if (body.sex !== undefined) player.sex = Number(body.sex);
         if (body.look !== undefined) player.look = body.look;
         if (body.auras !== undefined) player.auras = body.auras;
+        if (body.mapId !== undefined) player.mapId = String(body.mapId);
+        if (body.mapName !== undefined) player.mapName = sanitizeText(body.mapName, player.mapName || 'Võ Lâm');
         player.lastSeen = Date.now();
       }
 
@@ -742,7 +1036,12 @@ const server = http.createServer((req, res) => {
       if (action === 'attack-player') {
         const targetUserId = String(body.targetUserId || '');
         const target = globalPlayers.get(targetUserId);
-        if (target && target.userId !== userId) {
+        if (
+          target &&
+          target.userId !== userId &&
+          !isTownSafeZone(player.mapId, player.mapName) &&
+          !isTownSafeZone(target.mapId, target.mapName)
+        ) {
           const damage = Math.max(6, Math.round((player.level || 1) * 6 + Math.random() * 12));
           target.hp = Math.max(0, Number(target.hp || 100) - damage);
           pushWorldMessage(`⚔️ ${player.name} tấn công ${target.name} gây ${damage} sát thương!`, 'Hệ thống');
@@ -824,6 +1123,38 @@ server.on('upgrade', (req, socket) => {
     activeSockets.delete(client);
   });
 });
+
+function monsterTick() {
+  const byMap = new Map(); // mapId -> [player]
+  for (const p of globalPlayers.values()) {
+    if (p.status === 'offline') continue;
+    const key = String(p.mapId);
+    if (!byMap.has(key)) byMap.set(key, []);
+    byMap.get(key).push(p);
+  }
+  for (const [mapId, players] of byMap) {
+    const map = monsterWorld.ensureMap(mapId);
+    if (!map) continue;
+    monsterWorld.tickMap(map, players, MONSTER_TICK_MS / 1000);
+    const frame = encodeWsFrame(JSON.stringify(monsterWorld.snapshot(mapId)));
+    for (const client of activeSockets) {
+      const p = client.userId && globalPlayers.get(client.userId);
+      if (!p || String(p.mapId) !== mapId || p.status === 'offline') continue;
+      try {
+        client.socket.write(frame);
+      } catch (e) {
+        // socket dead
+      }
+    }
+  }
+}
+setInterval(() => {
+  try {
+    monsterTick();
+  } catch (e) {
+    console.error('[monsters] tick error:', e);
+  }
+}, MONSTER_TICK_MS);
 
 server.listen(PORT, () => {
   console.log(`[Volamidle Single-World Server] running at http://localhost:${PORT}`);

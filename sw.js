@@ -1,4 +1,4 @@
-const C = "jxidle-v544",
+const C = "jxidle-v545",
   IMG = "jxidle-img-1",
   BUST = [
     "img/z/397.jpg",
@@ -54,6 +54,10 @@ const C = "jxidle-v544",
     if (e.request.method !== "GET") return;
     const t = new URL(e.request.url);
     if (t.origin !== location.origin || t.pathname.startsWith("/sb/")) return;
+    if (t.pathname.endsWith("/data.js")) {
+      e.respondWith(fetch(e.request, { cache: "no-cache" }));
+      return;
+    }
     if (ASSET.test(t.pathname)) {
       e.respondWith(
         caches.open(IMG).then((n) =>

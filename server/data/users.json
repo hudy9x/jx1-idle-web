@@ -1,0 +1,1217 @@
+{
+  "user_a6e2b2d6e84d": {
+    "userId": "user_a6e2b2d6e84d",
+    "username": "smoke_5536",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_a6e2b2d6e84d",
+      "username": "smoke_5536",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791620098960
+  },
+  "user_88d136cbb45d": {
+    "userId": "user_88d136cbb45d",
+    "username": "tester_1791620109554",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_88d136cbb45d",
+      "username": "tester_1791620109554",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791620109560
+  },
+  "user_c34fff5042fe": {
+    "userId": "user_c34fff5042fe",
+    "username": "tester_1791621093626",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_c34fff5042fe",
+      "username": "tester_1791621093626",
+      "level": 6,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 90,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "room_1791621093657"
+    },
+    "createdAt": 1791621093635
+  },
+  "user_2ce3f4202bb9": {
+    "userId": "user_2ce3f4202bb9",
+    "username": "tester2_1791621093657",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_2ce3f4202bb9",
+      "username": "tester2_1791621093657",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621093660
+  },
+  "user_2b9bf4539581": {
+    "userId": "user_2b9bf4539581",
+    "username": "tester_1791621375296",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_2b9bf4539581",
+      "username": "tester_1791621375296",
+      "level": 6,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 90,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "room_1791621375324"
+    },
+    "createdAt": 1791621375303
+  },
+  "user_dc0c111c4aee": {
+    "userId": "user_dc0c111c4aee",
+    "username": "tester2_1791621375324",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_dc0c111c4aee",
+      "username": "tester2_1791621375324",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621375326
+  },
+  "user_b802d011a6de": {
+    "userId": "user_b802d011a6de",
+    "username": "Player-692",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_b802d011a6de",
+      "username": "Player-692",
+      "level": 1,
+      "exp": 0,
+      "gold": 0,
+      "hp": 100,
+      "mp": 100,
+      "x": 45.3,
+      "y": 80.8,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621423071
+  },
+  "user_a25d96487f46": {
+    "userId": "user_a25d96487f46",
+    "username": "tester_1791621549440",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_a25d96487f46",
+      "username": "tester_1791621549440",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621549446
+  },
+  "user_b4cf47bbcd79": {
+    "userId": "user_b4cf47bbcd79",
+    "username": "tester_1791621549724",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_b4cf47bbcd79",
+      "username": "tester_1791621549724",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621549726
+  },
+  "user_c5801791d90b": {
+    "userId": "user_c5801791d90b",
+    "username": "tester_1791621549997",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_c5801791d90b",
+      "username": "tester_1791621549997",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621549999
+  },
+  "user_51db8e8bce58": {
+    "userId": "user_51db8e8bce58",
+    "username": "tester_1791621550268",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_51db8e8bce58",
+      "username": "tester_1791621550268",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621550270
+  },
+  "user_dfc057b1b12f": {
+    "userId": "user_dfc057b1b12f",
+    "username": "tester_1791621550541",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_dfc057b1b12f",
+      "username": "tester_1791621550541",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621550542
+  },
+  "user_96c5e65ffa5e": {
+    "userId": "user_96c5e65ffa5e",
+    "username": "tester_1791621550816",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_96c5e65ffa5e",
+      "username": "tester_1791621550816",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621550817
+  },
+  "user_c82040ce6035": {
+    "userId": "user_c82040ce6035",
+    "username": "tester_1791621551090",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_c82040ce6035",
+      "username": "tester_1791621551090",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621551091
+  },
+  "user_5c44a5a6ad35": {
+    "userId": "user_5c44a5a6ad35",
+    "username": "tester_1791621551364",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_5c44a5a6ad35",
+      "username": "tester_1791621551364",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621551365
+  },
+  "user_25050b0166f9": {
+    "userId": "user_25050b0166f9",
+    "username": "tester_1791621551638",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_25050b0166f9",
+      "username": "tester_1791621551638",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621551639
+  },
+  "user_34433f1deea7": {
+    "userId": "user_34433f1deea7",
+    "username": "tester_1791621551918",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_34433f1deea7",
+      "username": "tester_1791621551918",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621551920
+  },
+  "user_235b76a728ea": {
+    "userId": "user_235b76a728ea",
+    "username": "tester_1791621552201",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_235b76a728ea",
+      "username": "tester_1791621552201",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621552201
+  },
+  "user_7396436bd818": {
+    "userId": "user_7396436bd818",
+    "username": "tester_1791621552478",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_7396436bd818",
+      "username": "tester_1791621552478",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621552479
+  },
+  "user_b46b6c56b753": {
+    "userId": "user_b46b6c56b753",
+    "username": "tester_1791621552753",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_b46b6c56b753",
+      "username": "tester_1791621552753",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621552754
+  },
+  "user_5ee2393d9ab2": {
+    "userId": "user_5ee2393d9ab2",
+    "username": "tester_1791621553027",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_5ee2393d9ab2",
+      "username": "tester_1791621553027",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621553028
+  },
+  "user_79ae85824a66": {
+    "userId": "user_79ae85824a66",
+    "username": "tester_1791621553302",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_79ae85824a66",
+      "username": "tester_1791621553302",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621553303
+  },
+  "user_c493ad5b54a5": {
+    "userId": "user_c493ad5b54a5",
+    "username": "tester_1791621553570",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_c493ad5b54a5",
+      "username": "tester_1791621553570",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621553571
+  },
+  "user_49714d3dfc9d": {
+    "userId": "user_49714d3dfc9d",
+    "username": "tester_1791621553836",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_49714d3dfc9d",
+      "username": "tester_1791621553836",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621553837
+  },
+  "user_d799595ac7fe": {
+    "userId": "user_d799595ac7fe",
+    "username": "tester_1791621554107",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_d799595ac7fe",
+      "username": "tester_1791621554107",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621554108
+  },
+  "user_ef6297e1176d": {
+    "userId": "user_ef6297e1176d",
+    "username": "tester_1791621554379",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_ef6297e1176d",
+      "username": "tester_1791621554379",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621554380
+  },
+  "user_13e89f8b2c2c": {
+    "userId": "user_13e89f8b2c2c",
+    "username": "tester_1791621554644",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_13e89f8b2c2c",
+      "username": "tester_1791621554644",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621554645
+  },
+  "user_832c7707f97d": {
+    "userId": "user_832c7707f97d",
+    "username": "tester_1791621554918",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_832c7707f97d",
+      "username": "tester_1791621554918",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621554918
+  },
+  "user_ff40b8676e32": {
+    "userId": "user_ff40b8676e32",
+    "username": "tester_1791621555184",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_ff40b8676e32",
+      "username": "tester_1791621555184",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621555184
+  },
+  "user_5b7f800e1dfc": {
+    "userId": "user_5b7f800e1dfc",
+    "username": "tester_1791621555448",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_5b7f800e1dfc",
+      "username": "tester_1791621555448",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621555448
+  },
+  "user_d4ee49787d89": {
+    "userId": "user_d4ee49787d89",
+    "username": "tester_1791621555720",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_d4ee49787d89",
+      "username": "tester_1791621555720",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621555721
+  },
+  "user_8a80a87bf30a": {
+    "userId": "user_8a80a87bf30a",
+    "username": "tester_1791621555993",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_8a80a87bf30a",
+      "username": "tester_1791621555993",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621555994
+  },
+  "user_295d6e7dbe94": {
+    "userId": "user_295d6e7dbe94",
+    "username": "tester_1791621556266",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_295d6e7dbe94",
+      "username": "tester_1791621556266",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621556267
+  },
+  "user_fba7a04ddf3f": {
+    "userId": "user_fba7a04ddf3f",
+    "username": "tester_1791621556533",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_fba7a04ddf3f",
+      "username": "tester_1791621556533",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621556533
+  },
+  "user_5456e33394ca": {
+    "userId": "user_5456e33394ca",
+    "username": "tester_1791621556805",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_5456e33394ca",
+      "username": "tester_1791621556805",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621556806
+  },
+  "user_5afe658bd9c3": {
+    "userId": "user_5afe658bd9c3",
+    "username": "tester_1791621557078",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_5afe658bd9c3",
+      "username": "tester_1791621557078",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621557079
+  },
+  "user_6b58dac72ea1": {
+    "userId": "user_6b58dac72ea1",
+    "username": "tester_1791621557351",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_6b58dac72ea1",
+      "username": "tester_1791621557351",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby"
+    },
+    "createdAt": 1791621557351
+  },
+  "user_c0f17d8c44b2": {
+    "userId": "user_c0f17d8c44b2",
+    "username": "tester_1791621677211",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_c0f17d8c44b2",
+      "username": "tester_1791621677211",
+      "level": 6,
+      "exp": 0,
+      "gold": 999,
+      "hp": 90,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "room_1791621677298",
+      "equipment": [
+        {
+          "id": "slot_0",
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5,
+          "rarity": "common",
+          "stats": {}
+        },
+        {
+          "id": "slot_1",
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4,
+          "rarity": "common",
+          "stats": {}
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791621677211",
+        "level": 12,
+        "hp": 220,
+        "mp": 100,
+        "gold": 999,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791621677211"
+    },
+    "createdAt": 1791621677220
+  },
+  "user_ab2283a01573": {
+    "userId": "user_ab2283a01573",
+    "username": "tester2_1791621677298",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_ab2283a01573",
+      "username": "tester2_1791621677298",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "mp": 100,
+      "x": 0,
+      "y": 0,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "lastRoom": "volamidle-lobby",
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791621677298",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791621677299
+  },
+  "user_d225e9be226e": {
+    "userId": "user_d225e9be226e",
+    "username": "tester_1791623749024",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_d225e9be226e",
+      "username": "tester_1791623749024",
+      "level": 12,
+      "exp": 0,
+      "gold": 999,
+      "hp": 220,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [
+        {
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5
+        },
+        {
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791623749024",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791623749024"
+    },
+    "createdAt": 1791623749030
+  },
+  "user_59551b35deff": {
+    "userId": "user_59551b35deff",
+    "username": "tester2_1791623749080",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_59551b35deff",
+      "username": "tester2_1791623749080",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791623749080",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791623749083
+  },
+  "user_3925a3bc5f7a": {
+    "userId": "user_3925a3bc5f7a",
+    "username": "tester_1791623803112",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_3925a3bc5f7a",
+      "username": "tester_1791623803112",
+      "level": 12,
+      "exp": 0,
+      "gold": 999,
+      "hp": 220,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [
+        {
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5
+        },
+        {
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791623803112",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791623803112"
+    },
+    "createdAt": 1791623803119
+  },
+  "user_5950706a11bf": {
+    "userId": "user_5950706a11bf",
+    "username": "tester2_1791623803154",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_5950706a11bf",
+      "username": "tester2_1791623803154",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791623803154",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791623803155
+  },
+  "user_d2b92c311475": {
+    "userId": "user_d2b92c311475",
+    "username": "2001",
+    "password": "guest_password_123",
+    "profile": {
+      "userId": "user_d2b92c311475",
+      "username": "2001",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "2001",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791624136838
+  },
+  "user_163e14771717": {
+    "userId": "user_163e14771717",
+    "username": "Tân thủ",
+    "password": "guest_password_123",
+    "profile": {
+      "userId": "user_163e14771717",
+      "username": "Tân thủ",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "Tân thủ",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791624144330
+  },
+  "user_6828d3449655": {
+    "userId": "user_6828d3449655",
+    "username": "tester_1791625357856",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_6828d3449655",
+      "username": "tester_1791625357856",
+      "level": 12,
+      "exp": 0,
+      "gold": 999,
+      "hp": 220,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [
+        {
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5
+        },
+        {
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791625357856",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791625357856"
+    },
+    "createdAt": 1791625357863
+  },
+  "user_674e3edd35f5": {
+    "userId": "user_674e3edd35f5",
+    "username": "tester2_1791625357905",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_674e3edd35f5",
+      "username": "tester2_1791625357905",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791625357905",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791625357906
+  },
+  "user_53502d572f49": {
+    "userId": "user_53502d572f49",
+    "username": "tester_1791626377781",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_53502d572f49",
+      "username": "tester_1791626377781",
+      "level": 12,
+      "exp": 0,
+      "gold": 999,
+      "hp": 220,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [
+        {
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5
+        },
+        {
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791626377781",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791626377781"
+    },
+    "createdAt": 1791626377788
+  },
+  "user_f4ddba7da1ec": {
+    "userId": "user_f4ddba7da1ec",
+    "username": "tester2_1791626377832",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_f4ddba7da1ec",
+      "username": "tester2_1791626377832",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791626377832",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791626377835
+  }
+}

@@ -99879,6 +99879,82 @@ body.ngate-on #csel{display:none}
     "serviceWorker" in navigator &&
       location.protocol.startsWith("http") &&
       navigator.serviceWorker.register("sw.js").catch(() => {}));
+  var GMApply = function (A) {
+      if (!r || !r.fac) {
+        M("Cần có nhân vật trước khi dùng GM Tool.");
+        return;
+      }
+      switch (A) {
+        case "gold":
+          (r.gold = (r.gold || 0) + 1e7), (r.last = Date.now()), B();
+          M("<b>GM:</b> +10.000.000 lượng");
+          break;
+        case "knb":
+          (r.knb = (r.knb || 0) + 500), (r.last = Date.now()), B();
+          M("<b>GM:</b> +500 Kim Nguyên Bảo");
+          break;
+        case "xp":
+          (r.xp = (r.xp || 0) + 500000000000), (r.last = Date.now()), B();
+          M("<b>GM:</b> +500.000.000.000 XP");
+          break;
+        case "full":
+          if (c && c.P) {
+            (c.P.life = c.P.maxLife || c.P.life || 1),
+              (c.P.mana = c.P.maxMana || c.P.mana || 1);
+          }
+          B();
+          M("<b>GM:</b> hồi full HP / MP");
+          break;
+        default:
+          return;
+      }
+    },
+    GMOpenDialog = function () {
+      const n = r && r.fac
+        ? `Nhân vật: <b>${D(r.name || "Vô danh")}</b> · Cấp <b>${r.lvl || 1}</b> · Lượng <b>${j(r.gold || 0)}</b> · KNB <b>${X(r.knb || 0)}</b>`
+        : "Chưa có nhân vật đang chạy";
+      J(
+        `<div class="gm-tool-wrap"><h3 style="margin:0 0 12px;color:#f3d27a">GM Tool</h3><div class="gm-tool-status">${n}</div><div class="gm-tool-grid"><button class="btn" data-gm="gold">+10M lượng</button><button class="btn" data-gm="knb">+500 KNB</button><button class="btn" data-gm="xp">+500.000.000.000 XP</button><button class="btn" data-gm="full">Full HP/MP</button><button class="btn" data-gm-close>Đóng</button></div></div>`,
+        () => {
+          const t = u("#modal");
+          if (!t) return;
+          t.querySelectorAll("[data-gm]").forEach((e) => {
+            e.onclick = () => GMApply(e.dataset.gm);
+          });
+          const a = t.querySelector("[data-gm-close]");
+          a && (a.onclick = () => t0());
+        },
+        !1,
+      );
+    },
+    GMToolInit = function () {
+      if (document.getElementById("gmToolBtn")) return;
+      const A = document.createElement("button");
+      (A.id = "gmToolBtn"),
+        (A.type = "button"),
+        (A.textContent = "GM"),
+        (A.onclick = GMOpenDialog),
+        (A.title = "GM Tool"),
+        document.body.appendChild(A);
+      const n = document.createElement("style");
+      (n.id = "gmToolCss"),
+        (n.textContent = `#gmToolBtn{position:fixed;left:18px;top:18px;z-index:99999;padding:8px 12px;border:1px solid #f7d77d;border-radius:999px;background:linear-gradient(#3d1d13,#120b09);color:#ffebaf;font-weight:700;cursor:pointer;box-shadow:0 10px 20px rgba(0,0,0,.35);font-size:13px;transition:transform .15s ease}#gmToolBtn:hover{transform:translateY(-1px)}.gm-tool-wrap{display:flex;flex-direction:column;gap:8px}.gm-tool-status{padding:8px 10px;border:1px solid #6a512d;border-radius:6px;background:#120d08;color:#f0dca9;font-size:13px;line-height:1.5}.gm-tool-grid{display:grid;grid-template-columns:repeat(2,minmax(120px,1fr));gap:8px;margin-top:6px}.gm-tool-grid .btn{width:100%}.gm-tool-grid [data-gm-close]{background:linear-gradient(#4a2d29,#1c120d);border-color:#a16552}@media (max-width:520px){#gmToolBtn{left:12px;top:12px;padding:7px 10px;font-size:12px}.gm-tool-grid{grid-template-columns:1fr}}`),
+        document.head.appendChild(n);
+      const t = () => {
+        try {
+          window.player = r;
+        } catch {}
+        try {
+          window.user = typeof k < "u" && k.user ? k.user : null;
+        } catch {}
+        try {
+          window.heroPos = b;
+        } catch {}
+
+      };
+      t(), setInterval(t, 1e3);
+    };
+  GMToolInit();
   var Mo = 544;
   setInterval(gk, 300 * 1e3);
 })();

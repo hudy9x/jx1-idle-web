@@ -1,5 +1,15 @@
 {
+  "name": "volamidle-online",
+  "version": "1.0.0",
+  "description": "MVP server multiplayer for Volamidle",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "test": "node server/tests/run.js"
+  },
   "dependencies": {
-    "prettier": "^3.9.9"
+    "prettier": "^3.9.9",
+    "ws": "^8.22.0"
   }
 }

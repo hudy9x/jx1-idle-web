@@ -77612,6 +77612,7 @@
       }
       return (
         Rs(b, t, e),
+        (typeof window.onHeroSkillCast == "function" && window.onHeroSkillCast(b, t, e)),
         e.ev && Nw(e, t, n, d),
         (b.face = t.x >= b.x ? 1 : -1),
         (b.dir = On(t.x - b.x, t.y - b.y)),
@@ -80383,6 +80384,7 @@
           n.fillText(a.t, a.x, a.y));
       ((n.globalAlpha = 1),
         (c.txt = c.txt.filter((a) => a.life > 0)),
+        (typeof window.onWorldDrawAfterFx == "function" && window.onWorldDrawAfterFx(n, A)),
         n.setTransform(d1, 0, 0, d1, 0, 0),
         typeof md == "function" && md(n),
         lp(n),
@@ -99950,7 +99952,198 @@ body.ngate-on #csel{display:none}
         try {
           window.heroPos = b;
         } catch {}
+        try {
+          window.getHeroLookData = () => {
+            let look = null;
+            if (typeof u5 == "function") {
+              const jx = u5();
+              if (jx) {
+                look = {
+                  sx: jx.sx,
+                  r: Object.assign({}, jx.rows, {
+                    horse: r && r.eq && r.eq.horse && typeof m5 == "function" ? m5(r.eq.horse) : -1,
+                  }),
+                  ride: r && r.eq && r.eq.horse && typeof c < "u" && c.mounted ? 1 : 0,
+                };
+              }
+            }
+            let auras = [];
+            if (typeof D0 == "function") {
+              const rb = Math.min(5, D0());
+              if (rb > 0) auras.push({ kind: "rb", lvl: rb });
+            }
+            if (typeof xp == "function") {
+              const skAuras = xp();
+              if (Array.isArray(skAuras)) {
+                skAuras.slice(0, 3).forEach((a) => {
+                  if (a && a.f) {
+                    auras.push({
+                      f: a.f,
+                      n: a.n,
+                      w: a.w,
+                      h: a.h,
+                      ax: a.ax,
+                      ay: a.ay,
+                      ms: a.ms,
+                      pos: a.pos,
+                    });
+                  }
+                });
+              }
+            }
+            return { look, auras };
+          };
+        } catch {}
+        try {
+          window.renderMultiplayerPlayer = (ctx, oth, dt) => {
+            if (!ctx || !oth) return;
+            const x = Number.isFinite(oth.x) ? oth.x : 160;
+            const y = Number.isFinite(oth.y) ? oth.y : 180;
+            const dir = (oth.dir != null ? oth.dir : 0) % 8;
+            const isMoving = !!oth.moving;
+            const act = oth.act === "at" ? "at" : (isMoving ? "run" : "st");
+            const nowSec = performance.now() / 1000;
+            const clockSec = typeof c < "u" && c.clock ? c.clock : nowSec;
 
+            // 1. Shadow
+            ctx.fillStyle = "#0007";
+            ctx.beginPath();
+            ctx.ellipse(x, y, 16, 6, 0, 0, 7);
+            ctx.fill();
+
+            // 2. Auras / Vòng sáng chân
+            // 2.1. Vòng Hào Quang Môn Phái Ngũ Hành (Luôn tỏa sáng lung linh dưới chân)
+            const facKey = String(oth.fac || "wudang").toLowerCase();
+            const factionSeriesMap = {
+              shaolin: "#ffd32a",
+              tianwang: "#ffd32a",
+              tangmen: "#2ed573",
+              wudu: "#2ed573",
+              emei: "#1e90ff",
+              cuiyan: "#1e90ff",
+              gaibang: "#ff4757",
+              tianren: "#ff4757",
+              wudang: "#ffa502",
+              kunlun: "#ffa502",
+            };
+            const auraColor = factionSeriesMap[facKey] || (typeof I < "u" && I[oth.fac] && typeof m0 < "u" && m0[I[oth.fac].series]) || "#2ed573";
+            const auraWave = 0.5 + 0.5 * Math.sin(clockSec * 3.5);
+
+            ctx.save();
+            ctx.globalAlpha = 0.52 + 0.28 * auraWave;
+            ctx.strokeStyle = auraColor;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.ellipse(x, y, 22 + auraWave * 4, 8 + auraWave * 1.5, 0, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Gợn sóng hào quang thứ hai lan tỏa
+            ctx.globalAlpha = 0.25 * (1 - auraWave);
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.ellipse(x, y, 26 + auraWave * 6, 9.5 + auraWave * 2, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+
+            // 2.2. Auras Chuyển Sinh & Vòng sáng kỹ năng đặc biệt
+            if (Array.isArray(oth.auras) && typeof Xs == "function") {
+              for (const a of oth.auras) {
+                if (a.kind === "rb" && typeof Ec < "u" && Ec[a.lvl]) {
+                  Xs(ctx, Ec[a.lvl], x, y, 0, clockSec, Cn, 0.95);
+                } else if (a.f) {
+                  Xs(ctx, a, x, y, 0, clockSec, Cn, a.pos === "foot" ? 0.85 : 0.9);
+                }
+              }
+            }
+
+            // 3. Render JXLOOK (VŨ KHÍ, ÁO GIÁP, MŨ, NGỰA, GIỚI TÍNH)
+            let drawn = false;
+            let heroHeight = 60;
+            const heroInfo = typeof yt == "function" ? yt(oth.fac, oth.sex) : null;
+            const animKey = heroInfo && heroInfo.anim;
+
+            const animTime = act === "at" ? (oth.actT || 0) : clockSec;
+            if (oth.look && typeof my == "function" && typeof lt == "function") {
+              const J = my(oth.look);
+              if (J) {
+                drawn = lt(act, dir, animTime, x, y, Cn, 1, animKey, J);
+                if (!drawn && act !== "st") {
+                  drawn = lt(isMoving ? "run" : "st", dir, clockSec, x, y, Cn, 1, animKey, J);
+                }
+              }
+            }
+
+            // 4. Fallback faction base animated sprite
+            if (!drawn && animKey && typeof o2 == "function") {
+              drawn = o2(animKey, act, dir, animTime, x, y, Cn) || o2(animKey, "st", dir, clockSec, x, y, Cn);
+            }
+
+            // 5. Fallback static portrait
+            if (!drawn && heroInfo && heroInfo.img && typeof o5 == "function" && typeof PA == "function") {
+              const imgEl = PA(heroInfo.img);
+              drawn = o5(imgEl, heroInfo.sz, x, y, Cn, dir > 4);
+            }
+
+            if (drawn && typeof drawn === "number") {
+              heroHeight = Math.min(drawn, 90);
+            }
+
+            // 6. Nameplate & HP Bar
+            const pY = y - heroHeight * 0.9 - 6;
+            const isSelected = window.__volamidleOnline && window.__volamidleOnline.state && window.__volamidleOnline.state.selectedTargetId === oth.userId;
+            const nameColor = isSelected ? "#ff6b81" : oth.fac ? (typeof m0 < "u" && typeof I < "u" && I[oth.fac] && m0[I[oth.fac].series]) || "#7fe36a" : "#7fe36a";
+
+            if (typeof zs == "function") {
+              zs(
+                x,
+                pY,
+                `${oth.name || "Hiệp Khách"} · Lv${oth.level || 1}`,
+                nameColor,
+                11,
+                (oth.hp || 100) / Math.max(1, oth.maxHp || 100),
+                "#5fd35a",
+                isSelected ? "«Mục tiêu»" : "",
+                isSelected ? "#ff4757" : ""
+              );
+            }
+
+            return true;
+          };
+        } catch {}
+        try {
+          window.triggerGameSkillFx = (attackerPos, targetPos, skillId) => {
+            if (typeof Rs != "function") return;
+            const skId = skillId || (c && c.P && c.P.main && c.P.main.id) || 10;
+            const ax = Number.isFinite(attackerPos.x) ? attackerPos.x : 160;
+            const ay = Number.isFinite(attackerPos.y) ? attackerPos.y : 180;
+            const tx = Number.isFinite(targetPos.x) ? targetPos.x : 200;
+            const ty = Number.isFinite(targetPos.y) ? targetPos.y : 180;
+            const src = { x: ax, y: ay, ox: ax, oy: ay };
+            const tgt = { x: tx, y: ty };
+
+            let skillDef = null;
+            if (typeof a0 < "u" && a0.f && a0.f[skId]) {
+              skillDef = { id: skId, ox: ax, oy: ay };
+            } else if (c && c.P && c.P.main) {
+              skillDef = Object.assign({}, c.P.main, { ox: ax, oy: ay });
+            } else {
+              skillDef = { id: skId, ox: ax, oy: ay };
+            }
+
+            try {
+              Rs(src, tgt, skillDef);
+              if (typeof Rc == "function" && skId) {
+                try { Rc(skId); } catch {}
+              }
+            } catch (err) {}
+          };
+          window.getCurrentHeroSkillId = () => {
+            if (c && c.P && c.P.main) {
+              return c.P.main.id || 10;
+            }
+            return 10;
+          };
+        } catch {}
       };
       t(), setInterval(t, 1e3);
     };

@@ -1213,5 +1213,449 @@
       }
     },
     "createdAt": 1791626377835
+  },
+  "user_6af6d8e38cb7": {
+    "userId": "user_6af6d8e38cb7",
+    "username": "tester_1791631314236",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_6af6d8e38cb7",
+      "username": "tester_1791631314236",
+      "level": 12,
+      "exp": 0,
+      "gold": 999,
+      "hp": 220,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [
+        {
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5
+        },
+        {
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791631314236",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791631314236"
+    },
+    "createdAt": 1791631314248
+  },
+  "user_b2cdbb45fbdd": {
+    "userId": "user_b2cdbb45fbdd",
+    "username": "tester2_1791631314348",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_b2cdbb45fbdd",
+      "username": "tester2_1791631314348",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791631314348",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791631314350
+  },
+  "user_663e3cee48b9": {
+    "userId": "user_663e3cee48b9",
+    "username": "tester_1791631338623",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_663e3cee48b9",
+      "username": "tester_1791631338623",
+      "level": 12,
+      "exp": 0,
+      "gold": 999,
+      "hp": 220,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [
+        {
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5
+        },
+        {
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791631338623",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791631338623"
+    },
+    "createdAt": 1791631338632
+  },
+  "user_cb2c01e682f4": {
+    "userId": "user_cb2c01e682f4",
+    "username": "tester2_1791631338734",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_cb2c01e682f4",
+      "username": "tester2_1791631338734",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791631338734",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791631338736
+  },
+  "user_481fb1e21fdc": {
+    "userId": "user_481fb1e21fdc",
+    "username": "tester_1791631387540",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_481fb1e21fdc",
+      "username": "tester_1791631387540",
+      "level": 12,
+      "exp": 0,
+      "gold": 999,
+      "hp": 220,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [
+        {
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5
+        },
+        {
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791631387540",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791631387540"
+    },
+    "createdAt": 1791631387552
+  },
+  "user_3aaabbfafc77": {
+    "userId": "user_3aaabbfafc77",
+    "username": "tester2_1791631387611",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_3aaabbfafc77",
+      "username": "tester2_1791631387611",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791631387611",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791631387613
+  },
+  "user_789bce84ea92": {
+    "userId": "user_789bce84ea92",
+    "username": "tester_1791631963304",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_789bce84ea92",
+      "username": "tester_1791631963304",
+      "level": 12,
+      "exp": 0,
+      "gold": 999,
+      "hp": 220,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [
+        {
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5
+        },
+        {
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791631963304",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791631963304"
+    },
+    "createdAt": 1791631963311
+  },
+  "user_05aacb67b0be": {
+    "userId": "user_05aacb67b0be",
+    "username": "tester2_1791631963357",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_05aacb67b0be",
+      "username": "tester2_1791631963357",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791631963357",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791631963359
+  },
+  "user_12f358c48a2d": {
+    "userId": "user_12f358c48a2d",
+    "username": "tester_1791631983111",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_12f358c48a2d",
+      "username": "tester_1791631983111",
+      "level": 12,
+      "exp": 0,
+      "gold": 999,
+      "hp": 220,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [
+        {
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5
+        },
+        {
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791631983111",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791631983111"
+    },
+    "createdAt": 1791631983118
+  },
+  "user_f347b1806075": {
+    "userId": "user_f347b1806075",
+    "username": "tester2_1791631983157",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_f347b1806075",
+      "username": "tester2_1791631983157",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791631983157",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791631983159
+  },
+  "user_abe1a85e7149": {
+    "userId": "user_abe1a85e7149",
+    "username": "tester_1791633655935",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_abe1a85e7149",
+      "username": "tester_1791633655935",
+      "level": 12,
+      "exp": 0,
+      "gold": 999,
+      "hp": 220,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [
+        {
+          "slot": "weapon",
+          "name": "Kiếm",
+          "level": 5
+        },
+        {
+          "slot": "armor",
+          "name": "Giáp",
+          "level": 4
+        }
+      ],
+      "characterState": {
+        "name": "tester_1791633655935",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      },
+      "name": "tester_1791633655935"
+    },
+    "createdAt": 1791633655954
+  },
+  "user_9673d4384b20": {
+    "userId": "user_9673d4384b20",
+    "username": "tester2_1791633656039",
+    "password": "demo123",
+    "profile": {
+      "userId": "user_9673d4384b20",
+      "username": "tester2_1791633656039",
+      "level": 1,
+      "exp": 0,
+      "gold": 1000,
+      "hp": 100,
+      "maxHp": 100,
+      "mp": 100,
+      "x": 160,
+      "y": 180,
+      "status": "online",
+      "wins": 0,
+      "losses": 0,
+      "equipment": [],
+      "characterState": {
+        "name": "tester2_1791633656039",
+        "level": 1,
+        "hp": 100,
+        "mp": 100,
+        "gold": 1000,
+        "exp": 0,
+        "status": "online"
+      }
+    },
+    "createdAt": 1791633656042
   }
 }

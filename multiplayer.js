@@ -12,6 +12,20 @@
     wsConnected: false,
     minimized: false,
     lastChatMap: new Map(), // userId -> { text, ts }
+    skillFx: [], // Các hiệu ứng chưởng lực/kiếm khí đang bay
+  };
+
+  const FACTION_COLORS = {
+    shaolin: '#ffd32a', // Kim
+    tianwang: '#ffd32a',
+    tangmen: '#2ed573', // Mộc
+    wudu: '#2ed573',
+    emei: '#1e90ff',    // Thủy
+    cuiyan: '#1e90ff',
+    gaibang: '#ff4757', // Hỏa
+    tianren: '#ff4757',
+    wudang: '#ffa502',  // Thổ
+    kunlun: '#ffa502',
   };
 
   const FACTIONS = [
@@ -26,6 +40,160 @@
     'wudang',
     'kunlun',
   ];
+
+  let lastFxFrameTs = 0;
+  function spawnSkillVisual(attackerX, attackerY, targetX, targetY, fac) {
+    const facKey = String(fac || 'wudang').toLowerCase();
+    const color = FACTION_COLORS[facKey] || '#ffd32a';
+    const ax = Number(attackerX) || 160;
+    const ay = Number(attackerY) || 180;
+    let tx = Number(targetX) || (ax + 120);
+    let ty = Number(targetY) || ay;
+    const dist = Math.hypot(tx - ax, ty - ay);
+    if (dist < 10) {
+      tx = ax + 80;
+    }
+    const speed = Math.max(3.5, Math.min(6.0, 360 / Math.max(40, dist)));
+    state.skillFx.push({
+      x1: ax,
+      y1: ay - 20,
+      x2: tx,
+      y2: ty - 14,
+      progress: 0,
+      speed,
+      color,
+      exploded: false,
+      blastRadius: 6,
+      blastAlpha: 1,
+      particles: [],
+    });
+  }
+
+  function drawSkillEffects(ctx, dt) {
+    if (!ctx || !state.skillFx || !state.skillFx.length) return;
+    const now = performance.now();
+    const isNewFrame = now - lastFxFrameTs >= 8;
+    if (isNewFrame) lastFxFrameTs = now;
+    const frameDt = Math.min(0.06, dt || 0.016);
+
+    for (let i = state.skillFx.length - 1; i >= 0; i--) {
+      const fx = state.skillFx[i];
+      ctx.save();
+
+      if (!fx.exploded) {
+        if (isNewFrame) fx.progress += frameDt * (fx.speed || 4.2);
+        const t = Math.min(1, fx.progress);
+        const curX = fx.x1 + (fx.x2 - fx.x1) * t;
+        const curY = fx.y1 + (fx.y2 - fx.y1) * t;
+
+        const angle = Math.atan2(fx.y2 - fx.y1, fx.x2 - fx.x1);
+        const trailLen = 34;
+        const backX = curX - Math.cos(angle) * trailLen;
+        const backY = curY - Math.sin(angle) * trailLen;
+
+        // Vệt đuôi chưởng lực tỏa sáng phát quang theo ngũ hành
+        const grad = ctx.createLinearGradient(backX, backY, curX, curY);
+        grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+        grad.addColorStop(0.4, fx.color);
+        grad.addColorStop(1, '#ffffff');
+
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 6;
+        ctx.lineCap = 'round';
+        ctx.shadowColor = fx.color;
+        ctx.shadowBlur = 18;
+        ctx.beginPath();
+        ctx.moveTo(backX, backY);
+        ctx.lineTo(curX, curY);
+        ctx.stroke();
+
+        // Lõi chưởng lực trắng sáng
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(curX - Math.cos(angle) * 16, curY - Math.sin(angle) * 16);
+        ctx.lineTo(curX, curY);
+        ctx.stroke();
+
+        // Đầu cầu năng lượng phát sáng
+        ctx.fillStyle = fx.color;
+        ctx.beginPath();
+        ctx.arc(curX, curY, 8, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(curX, curY, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (fx.progress >= 1 && isNewFrame) {
+          fx.exploded = true;
+          fx.blastRadius = 6;
+          fx.blastAlpha = 1;
+          fx.particles = [];
+          for (let p = 0; p < 10; p++) {
+            const a = (p * Math.PI * 2) / 10 + Math.random() * 0.35;
+            const spd = 45 + Math.random() * 70;
+            fx.particles.push({
+              x: fx.x2,
+              y: fx.y2,
+              vx: Math.cos(a) * spd,
+              vy: Math.sin(a) * spd,
+              life: 0.36,
+            });
+          }
+        }
+      } else {
+        // Vụ nổ va chạm bung tỏa
+        if (isNewFrame) {
+          fx.blastRadius += frameDt * 100;
+          fx.blastAlpha = Math.max(0, fx.blastAlpha - frameDt * 2.8);
+        }
+
+        ctx.shadowColor = fx.color;
+        ctx.shadowBlur = 20;
+        ctx.strokeStyle = fx.color;
+        ctx.lineWidth = Math.max(1, 3.8 * fx.blastAlpha);
+        ctx.globalAlpha = fx.blastAlpha;
+
+        // Vòng nổ tròn
+        ctx.beginPath();
+        ctx.arc(fx.x2, fx.y2, fx.blastRadius, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Gợn sóng nổ hình elip dưới chân (2.5D mặt đất)
+        ctx.beginPath();
+        ctx.ellipse(fx.x2, fx.y2 + 4, fx.blastRadius * 1.2, fx.blastRadius * 0.45, 0, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Các tia lửa năng lượng bung ra
+        ctx.fillStyle = '#ffffff';
+        for (const pt of fx.particles) {
+          if (isNewFrame) {
+            pt.x += pt.vx * frameDt;
+            pt.y += pt.vy * frameDt;
+            pt.life -= frameDt;
+          }
+          if (pt.life > 0) {
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, Math.max(1, pt.life * 6.5), 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        if (fx.blastAlpha <= 0.05 && isNewFrame) {
+          state.skillFx.splice(i, 1);
+        }
+      }
+
+      ctx.restore();
+    }
+  }
+
+  // Hook render hiệu ứng chưởng vào canvas thế giới (chạy mỗi frame từ engine game)
+  window.onWorldDrawAfterFx = function (ctx, dt) {
+    drawSkillEffects(ctx, dt);
+  };
 
   // Image cache
   const imgCache = new Map();
@@ -107,10 +275,20 @@
     let fac = 'wudang';
     let sex = 0;
     let look = null;
+    let auras = [];
     if (window.player) {
       if (window.player.fac) fac = window.player.fac;
       if (window.player.sex != null) sex = Number(window.player.sex) || 0;
-      if (window.player.look) look = window.player.look;
+    }
+
+    if (typeof window.getHeroLookData === 'function') {
+      try {
+        const lookData = window.getHeroLookData();
+        if (lookData) {
+          if (lookData.look) look = lookData.look;
+          if (Array.isArray(lookData.auras)) auras = lookData.auras;
+        }
+      } catch (e) {}
     }
 
     if (typeof fac === 'string' && fac.startsWith('vo')) {
@@ -134,6 +312,7 @@
       fac,
       sex,
       look,
+      auras,
     };
   }
 
@@ -266,6 +445,8 @@
                 hp: data.hp || 100,
                 maxHp: data.maxHp || 100,
                 level: data.level || 1,
+                look: data.look || null,
+                auras: data.auras || [],
               };
               state.players.push(p);
               updateUi();
@@ -284,6 +465,8 @@
               if (data.level !== undefined) p.level = data.level;
               if (data.fac) p.fac = data.fac;
               if (data.sex !== undefined) p.sex = data.sex;
+              if (data.look !== undefined) p.look = data.look;
+              if (data.auras !== undefined) p.auras = data.auras;
             }
             return;
           }
@@ -309,6 +492,8 @@
                 local.level = remote.level;
                 local.fac = remote.fac || local.fac;
                 local.sex = remote.sex !== undefined ? remote.sex : local.sex;
+                if (remote.look !== undefined) local.look = remote.look;
+                if (remote.auras !== undefined) local.auras = remote.auras;
                 if (!Number.isFinite(local.renderX)) {
                   local.renderX = local.targetX;
                   local.renderY = local.targetY;
@@ -316,6 +501,8 @@
               } else {
                 state.players.push({
                   ...remote,
+                  look: remote.look || null,
+                  auras: remote.auras || [],
                   targetX: Number(remote.x),
                   targetY: Number(remote.y),
                   renderX: Number(remote.x),
@@ -366,6 +553,36 @@
               setStatus(`⚔️ ${data.attacker} gây ${data.damage} sát thương lên đối thủ!`);
             }
             updateUi();
+          } else if (data.type === 'skill_cast') {
+            if (data.userId === state.userId) return;
+
+            const matchPlayer = state.players.find((p) => p.userId === data.userId);
+            const attackerX = matchPlayer ? (matchPlayer.renderX || matchPlayer.x) : Number(data.attackerX || 160);
+            const attackerY = matchPlayer ? (matchPlayer.renderY || matchPlayer.y) : Number(data.attackerY || 180);
+            const targetX = Number(data.targetX) || (attackerX + 120);
+            const targetY = Number(data.targetY) || attackerY;
+
+            if (matchPlayer) {
+              matchPlayer.act = 'at';
+              matchPlayer.targetAct = 'at';
+              matchPlayer.atT = 0.55;
+              matchPlayer.actT = 0;
+              const dx = targetX - attackerX;
+              const dy = targetY - attackerY;
+              matchPlayer.dir = ((Math.round(Math.atan2(-dx, dy) / (Math.PI / 4)) % 8) + 8) % 8;
+              matchPlayer.targetDir = matchPlayer.dir;
+            }
+
+            // Kích hoạt chưởng lực bay và nổ trực tiếp trên màn hình
+            spawnSkillVisual(attackerX, attackerY, targetX, targetY, data.fac || (matchPlayer && matchPlayer.fac));
+
+            if (typeof window.triggerGameSkillFx === 'function') {
+              window.triggerGameSkillFx(
+                { x: attackerX, y: attackerY },
+                { x: targetX, y: targetY },
+                data.skillId
+              );
+            }
           }
         } catch (e) {
           console.warn('WS message parse error:', e);
@@ -480,10 +697,37 @@
   }
 
   function attackBoss() {
+    const hero = getHeroSnapshot();
+    const skillId = typeof window.getCurrentHeroSkillId === 'function' ? window.getCurrentHeroSkillId() : 10;
+    const dirAngle = ((hero.dir || 0) * Math.PI) / 4 - Math.PI / 2;
+    const targetX = hero.x + Math.round(Math.cos(dirAngle) * 170);
+    const targetY = hero.y + Math.round(Math.sin(dirAngle) * 170);
+
+    if (window.heroPos) {
+      window.heroPos.act = 'at';
+      window.heroPos.actT = 0;
+    }
+
+    spawnSkillVisual(hero.x, hero.y, targetX, targetY, hero.fac);
+
+    if (typeof window.triggerGameSkillFx === 'function') {
+      window.triggerGameSkillFx({ x: hero.x, y: hero.y }, { x: targetX, y: targetY }, skillId);
+    }
+
     if (state.wsConnected && state.ws && state.ws.readyState === WebSocket.OPEN) {
       state.ws.send(JSON.stringify({ type: 'attack_boss', name: state.username }));
+      state.ws.send(
+        JSON.stringify({
+          type: 'cast_skill',
+          attackerX: hero.x,
+          attackerY: hero.y,
+          targetX,
+          targetY,
+          skillId,
+          fac: hero.fac,
+        })
+      );
     } else {
-      const hero = getHeroSnapshot();
       fetch('/api/player-sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -505,6 +749,31 @@
       return;
     }
 
+    const targetPlayer = state.players.find((p) => p.userId === targetId);
+    const hero = getHeroSnapshot();
+
+    let targetX = targetPlayer ? (targetPlayer.renderX || targetPlayer.x) : 0;
+    let targetY = targetPlayer ? (targetPlayer.renderY || targetPlayer.y) : 0;
+
+    if (!targetX || !targetY) {
+      const dirAngle = ((hero.dir || 0) * Math.PI) / 4 - Math.PI / 2;
+      targetX = hero.x + Math.round(Math.cos(dirAngle) * 160);
+      targetY = hero.y + Math.round(Math.sin(dirAngle) * 160);
+    }
+
+    const skillId = typeof window.getCurrentHeroSkillId === 'function' ? window.getCurrentHeroSkillId() : 10;
+
+    if (window.heroPos) {
+      window.heroPos.act = 'at';
+      window.heroPos.actT = 0;
+    }
+
+    spawnSkillVisual(hero.x, hero.y, targetX, targetY, hero.fac);
+
+    if (typeof window.triggerGameSkillFx === 'function') {
+      window.triggerGameSkillFx({ x: hero.x, y: hero.y }, { x: targetX, y: targetY }, skillId);
+    }
+
     if (state.wsConnected && state.ws && state.ws.readyState === WebSocket.OPEN) {
       state.ws.send(
         JSON.stringify({
@@ -513,8 +782,19 @@
           name: state.username,
         })
       );
+      state.ws.send(
+        JSON.stringify({
+          type: 'cast_skill',
+          attackerX: hero.x,
+          attackerY: hero.y,
+          targetX,
+          targetY,
+          targetUserId: targetId,
+          skillId,
+          fac: hero.fac,
+        })
+      );
     } else {
-      const hero = getHeroSnapshot();
       fetch('/api/player-sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -649,74 +929,83 @@
       oth.act = oth.targetAct || (oth.moving ? 'run' : 'st');
     }
 
+    if (oth.atT > 0) {
+      oth.atT -= frameDt;
+      oth.actT = (oth.actT || 0) + frameDt;
+      oth.act = 'at';
+    } else {
+      oth.actT = 0;
+    }
+
     const x = Math.round(oth.renderX);
     const y = Math.round(oth.renderY);
 
-    ctx.save();
+    const renderPayload = {
+      userId: oth.userId,
+      name: oth.name,
+      level: oth.level,
+      hp: oth.hp,
+      maxHp: oth.maxHp,
+      x: x,
+      y: y,
+      dir: Number(oth.targetDir !== undefined ? oth.targetDir : oth.dir) || 0,
+      moving: Boolean(oth.moving),
+      act: oth.act || (oth.moving ? 'run' : 'st'),
+      actT: oth.actT || 0,
+      fac: oth.fac || 'wudang',
+      sex: Number(oth.sex) || 0,
+      look: oth.look || null,
+      auras: oth.auras || [],
+    };
 
-    // 1. Bóng đổ dưới chân
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-    ctx.beginPath();
-    ctx.ellipse(x, y, 16, 6, 0, 0, Math.PI * 2);
-    ctx.fill();
+    // 1. Ưu tiên engine render của game gốc (vũ khí, ngựa, áo, mũ, giới tính, hiệu ứng vòng sáng)
+    let nativeRendered = false;
+    if (typeof window.renderMultiplayerPlayer === 'function') {
+      try {
+        nativeRendered = Boolean(window.renderMultiplayerPlayer(ctx, renderPayload, frameDt));
+      } catch (err) {
+        nativeRendered = false;
+      }
+    }
 
-    // 2. Vòng tròn chọn mục tiêu PvP
+    // 2. Dự phòng khi engine game đang khởi động
+    if (!nativeRendered) {
+      ctx.save();
+      // Bóng đổ
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
+      ctx.beginPath();
+      ctx.ellipse(x, y, 16, 6, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sprite dự phòng
+      drawHeroSprite(ctx, renderPayload);
+
+      // Tên nhân vật & HP bar dự phòng
+      ctx.font = 'bold 11px "IBM Plex Mono", monospace, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = state.selectedTargetId === oth.userId ? '#ff6b81' : '#7bed9f';
+      ctx.fillText(`${oth.name || 'Hiệp Khách'} · Lv.${oth.level || 1}`, x, y - 48);
+
+      const hpPct = Math.max(0, Math.min(1, (oth.hp || 100) / (oth.maxHp || 100)));
+      const barW = 38;
+      const barH = 4;
+      ctx.fillStyle = '#2d3436';
+      ctx.fillRect(x - barW / 2, y - 44, barW, barH);
+      ctx.fillStyle = hpPct > 0.5 ? '#2ed573' : '#ff4757';
+      ctx.fillRect(x - barW / 2, y - 44, barW * hpPct, barH);
+      ctx.restore();
+    }
+
+    // 3. Vòng tròn chọn mục tiêu PvP
     if (state.selectedTargetId === oth.userId) {
+      ctx.save();
       ctx.strokeStyle = '#ff4757';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.ellipse(x, y, 22, 9, 0, 0, Math.PI * 2);
       ctx.stroke();
+      ctx.restore();
     }
-
-    // 3. Chuẩn hóa Entity Object
-    const entity = {
-      x,
-      y,
-      f: oth.fac || 'wudang',
-      s: oth.sex || 0,
-      mv: Boolean(oth.moving),
-      dir: Number(oth.targetDir !== undefined ? oth.targetDir : oth.dir) || 0,
-      t: performance.now() / 1000,
-      atT: oth.act === 'at' ? 0.3 : 0,
-      hurtT: oth.act === 'hurt' ? 0.2 : 0,
-      n: oth.name || 'Hiệp Khách',
-      l: oth.level || 1,
-      hp: Number.isFinite(oth.hp) ? oth.hp : 100,
-      hpMax: Number.isFinite(oth.maxHp) ? oth.maxHp : 100,
-      J: oth.look || null,
-    };
-
-    // 4. Ưu tiên render qua engine game gốc (hỗ trợ vũ khí/áo jxlook)
-    let spriteRendered = false;
-    if (typeof window.drawGameEntity === 'function') {
-      try {
-        spriteRendered = Boolean(window.drawGameEntity(ctx, entity, frameDt));
-      } catch (e) {
-        spriteRendered = false;
-      }
-    }
-
-    if (!spriteRendered) {
-      drawHeroSprite(ctx, entity);
-    }
-
-    // 5. Tên nhân vật và Môn Phái trên đầu
-    ctx.font = 'bold 11px "IBM Plex Mono", monospace, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#000000';
-    ctx.fillText(`${oth.name || 'Hiệp Khách'} · Lv.${oth.level || 1}`, x + 1, y - 47);
-    ctx.fillStyle = state.selectedTargetId === oth.userId ? '#ff6b81' : '#7bed9f';
-    ctx.fillText(`${oth.name || 'Hiệp Khách'} · Lv.${oth.level || 1}`, x, y - 48);
-
-    // 6. Thanh máu
-    const hpPct = Math.max(0, Math.min(1, (oth.hp || 100) / (oth.maxHp || 100)));
-    const barW = 38;
-    const barH = 4;
-    ctx.fillStyle = '#2d3436';
-    ctx.fillRect(x - barW / 2, y - 44, barW, barH);
-    ctx.fillStyle = hpPct > 0.5 ? '#2ed573' : hpPct > 0.2 ? '#ffa502' : '#ff4757';
-    ctx.fillRect(x - barW / 2, y - 44, barW * hpPct, barH);
 
     // 7. Bong bóng chat
     const chatInfo = state.lastChatMap.get(oth.userId);
@@ -744,6 +1033,11 @@
 
       ctx.fillStyle = '#ffffff';
       ctx.fillText(text, x, by + 13);
+    }
+
+    // 8. Dự phòng hiển thị chưởng lực nếu hook toàn cục chưa chạy trong frame
+    if (performance.now() - lastFxFrameTs >= 12) {
+      drawSkillEffects(ctx, frameDt);
     }
 
     ctx.restore();
@@ -788,6 +1082,7 @@
     dir: 0,
     moving: false,
     act: '',
+    lookStr: '',
     ts: 0,
   };
 
@@ -797,12 +1092,15 @@
     const hero = getHeroSnapshot();
     const now = performance.now();
     const movedDist = Math.hypot(hero.x - lastSentState.x, hero.y - lastSentState.y);
+    const lookStr = JSON.stringify(hero.look || null);
+    const lookChanged = lookStr !== lastSentState.lookStr;
 
     const stateChanged =
       movedDist >= 1.5 ||
       hero.dir !== lastSentState.dir ||
       hero.moving !== lastSentState.moving ||
-      hero.act !== lastSentState.act;
+      hero.act !== lastSentState.act ||
+      lookChanged;
 
     const heartbeatDue = now - lastSentState.ts >= 1000;
 
@@ -812,6 +1110,7 @@
       lastSentState.dir = hero.dir;
       lastSentState.moving = hero.moving;
       lastSentState.act = hero.act;
+      lastSentState.lookStr = lookStr;
       lastSentState.ts = now;
 
       state.ws.send(
@@ -827,10 +1126,40 @@
           fac: hero.fac,
           sex: hero.sex,
           look: hero.look,
+          auras: hero.auras,
         })
       );
     }
   }
+
+  // === HOOK BẮT SỰ KIỆN TUNG CHIÊU TỰ ĐỘNG CỦA NHÂN VẬT CHÍNH ===
+  let lastHeroCastTime = 0;
+  window.onHeroSkillCast = function (attacker, target, skill) {
+    const now = performance.now();
+    if (now - lastHeroCastTime < 240) return;
+    lastHeroCastTime = now;
+
+    const skillId = (skill && skill.id) || (typeof window.getCurrentHeroSkillId === 'function' ? window.getCurrentHeroSkillId() : 10);
+    const ax = attacker && Number.isFinite(attacker.x) ? Math.round(attacker.x) : (window.heroPos ? Math.round(window.heroPos.x) : 160);
+    const ay = attacker && Number.isFinite(attacker.y) ? Math.round(attacker.y) : (window.heroPos ? Math.round(window.heroPos.y) : 180);
+    const tx = target && Number.isFinite(target.x) ? Math.round(target.x) : (ax + (attacker && attacker.face < 0 ? -120 : 120));
+    const ty = target && Number.isFinite(target.y) ? Math.round(target.y) : ay;
+    const heroFac = (window.player && window.player.fac) || 'wudang';
+
+    if (state.wsConnected && state.ws && state.ws.readyState === WebSocket.OPEN) {
+      state.ws.send(
+        JSON.stringify({
+          type: 'cast_skill',
+          attackerX: ax,
+          attackerY: ay,
+          targetX: tx,
+          targetY: ty,
+          skillId,
+          fac: heroFac,
+        })
+      );
+    }
+  };
 
   (async function init() {
     try {

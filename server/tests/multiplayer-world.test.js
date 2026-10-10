@@ -105,10 +105,53 @@ async function testSingleWorld() {
     throw new Error('Client A did not receive boss damage broadcast from Client B');
   }
 
+  // Client A syncs position with horse and weapon look + aura
+  clientA.send({
+    type: 'sync',
+    x: 150,
+    y: 190,
+    dir: 2,
+    moving: true,
+    act: 'run',
+    fac: 'shaolin',
+    sex: 0,
+    look: { sx: 'm', r: { helm: 1, armor: 2, weapon: 3, horse: 0 }, ride: 1 },
+    auras: [{ kind: 'rb', lvl: 3 }],
+  });
+  await wait(300);
+
+  // Check if Client B received player_moved with look and auras
+  const movedReceived = clientB.messages.find(
+    (m) => m.type === 'player_moved' && m.userId === 'user_A' && m.look && m.auras
+  );
+  if (!movedReceived) {
+    throw new Error('Client B did not receive player_moved with look and auras from Client A');
+  }
+
+  // Client A casts skill towards target
+  clientA.send({
+    type: 'cast_skill',
+    skillId: 20,
+    targetX: 250,
+    targetY: 170,
+  });
+  await wait(300);
+
+  // Check if Client B received skill_cast
+  const skillReceived = clientB.messages.find(
+    (m) => m.type === 'skill_cast' && m.userId === 'user_A' && m.skillId === 20
+  );
+  if (!skillReceived) {
+    throw new Error('Client B did not receive skill_cast from Client A');
+  }
+
   console.log('SINGLE_WORLD_WS_TEST_SUCCESS:', {
     chatBroadcastVerified: true,
     bossBroadcastVerified: true,
     receivedBossHp: bossUpdated.boss.hp,
+    lookAurasBroadcastVerified: true,
+    verifiedHorseAndWeapon: movedReceived.look.ride === 1,
+    skillCastBroadcastVerified: true,
   });
 
   clientA.socket.destroy();

@@ -221,31 +221,30 @@ function handleWsMessage(client, message) {
       const userId = data.userId || (data.token && sessionMap.get(data.token));
       if (userId) {
         client.userId = userId;
-        const user = users[userId];
-        if (user) {
-          const p = {
-            id: userId,
-            userId,
-            name: data.name || user.username,
-            level: Number(data.level) || user.profile.level || 1,
-            hp: Number(data.hp) || user.profile.hp || 100,
-            maxHp: Number(data.maxHp) || 100,
-            gold: Number(data.gold) || user.profile.gold || 1000,
-            x: Number(data.x) || 160,
-            y: Number(data.y) || 180,
-            dir: Number(data.dir) || 0,
-            moving: !!data.moving,
-            act: data.act || 'st',
-            fac: data.fac || 'wudang',
-            sex: Number(data.sex) || 0,
-            look: data.look || null,
-            status: 'online',
-            lastSeen: Date.now(),
-          };
-          globalPlayers.set(userId, p);
-          pushWorldMessage(`${p.name} đã bước vào thế giới!`, 'Hệ thống');
-          broadcast({ type: 'player_joined', player: p });
-        }
+        const user = users[userId] || {};
+        const p = {
+          id: userId,
+          userId,
+          name: data.name || user.username || 'Hiệp Khách',
+          level: Number(data.level) || (user.profile && user.profile.level) || 1,
+          hp: Number(data.hp) || (user.profile && user.profile.hp) || 100,
+          maxHp: Number(data.maxHp) || 100,
+          gold: Number(data.gold) || (user.profile && user.profile.gold) || 1000,
+          x: Number(data.x) || 160,
+          y: Number(data.y) || 180,
+          dir: Number(data.dir) || 0,
+          moving: !!data.moving,
+          act: data.act || 'st',
+          fac: data.fac || 'wudang',
+          sex: Number(data.sex) || 0,
+          look: data.look || null,
+          auras: data.auras || [],
+          status: 'online',
+          lastSeen: Date.now(),
+        };
+        globalPlayers.set(userId, p);
+        pushWorldMessage(`${p.name} đã bước vào thế giới!`, 'Hệ thống');
+        broadcast({ type: 'player_joined', player: p });
       }
       client.socket.write(encodeWsFrame(JSON.stringify({ type: 'init', world: getWorldSnapshot() })));
       return;
@@ -266,12 +265,19 @@ function handleWsMessage(client, message) {
           gold: Number(data.gold) || 0,
           x: Number(data.x) || 160,
           y: Number(data.y) || 180,
+          dir: Number(data.dir) || 0,
+          moving: !!data.moving,
+          act: data.act || 'st',
+          fac: data.fac || 'wudang',
+          sex: Number(data.sex) || 0,
+          look: data.look || null,
+          auras: data.auras || [],
           status: 'online',
           lastSeen: Date.now(),
         };
         globalPlayers.set(userId, player);
       } else {
-        player.name = sanitizeText(data.name, player.name);
+        if (data.name) player.name = sanitizeText(data.name, player.name);
         if (data.hp !== undefined) player.hp = Number(data.hp);
         if (data.level !== undefined) player.level = Number(data.level);
         if (data.gold !== undefined) player.gold = Number(data.gold);
@@ -282,12 +288,13 @@ function handleWsMessage(client, message) {
         if (data.act) player.act = String(data.act);
         if (data.fac) player.fac = String(data.fac);
         if (data.sex !== undefined) player.sex = Number(data.sex);
-        if (data.look) player.look = data.look;
+        if (data.look !== undefined) player.look = data.look;
+        if (data.auras !== undefined) player.auras = data.auras;
         if (data.status) player.status = String(data.status);
         player.lastSeen = Date.now();
       }
 
-      // Phát sóng vị trí tức thì cho các người chơi khác (< 10ms)
+      // Phát sóng vị trí và trang phục tức thì cho các người chơi khác (< 10ms)
       broadcast(
         {
           type: 'player_moved',
@@ -300,6 +307,8 @@ function handleWsMessage(client, message) {
           act: player.act,
           fac: player.fac,
           sex: player.sex,
+          look: player.look,
+          auras: player.auras,
           hp: player.hp,
           maxHp: player.maxHp,
           level: player.level,
@@ -355,6 +364,27 @@ function handleWsMessage(client, message) {
           pushWorldMessage(`💀 ${target.name} đã bại trận dưới tay ${attacker.name}!`, 'Hệ thống');
         }
         broadcast({ type: 'pvp_update', attacker: attacker.name, target: target, damage });
+      }
+      return;
+    }
+
+    if (data.type === 'cast_skill') {
+      const player = globalPlayers.get(client.userId);
+      if (player) {
+        broadcast(
+          {
+            type: 'skill_cast',
+            userId: client.userId,
+            attackerX: Number(data.attackerX) || player.x,
+            attackerY: Number(data.attackerY) || player.y,
+            targetX: Number(data.targetX) || (player.x + 100),
+            targetY: Number(data.targetY) || player.y,
+            targetUserId: data.targetUserId,
+            skillId: data.skillId,
+            fac: data.fac || player.fac || 'wudang',
+          },
+          client.socket
+        );
       }
       return;
     }
@@ -669,6 +699,7 @@ const server = http.createServer((req, res) => {
           fac: body.fac || 'wudang',
           sex: Number(body.sex) || 0,
           look: body.look || null,
+          auras: body.auras || [],
           status: 'online',
           lastSeen: Date.now(),
         };
@@ -685,7 +716,8 @@ const server = http.createServer((req, res) => {
         if (body.act) player.act = String(body.act);
         if (body.fac) player.fac = String(body.fac);
         if (body.sex !== undefined) player.sex = Number(body.sex);
-        if (body.look) player.look = body.look;
+        if (body.look !== undefined) player.look = body.look;
+        if (body.auras !== undefined) player.auras = body.auras;
         player.lastSeen = Date.now();
       }
 

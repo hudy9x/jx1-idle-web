@@ -89,6 +89,21 @@
   <div id="toast" role="status" aria-live="polite"></div>
 </div>
 
+<script>
+  // Mỗi tab là 1 user & nhân vật riêng biệt (chuyển localStorage sang sessionStorage)
+  (function () {
+    try {
+      Object.defineProperty(window, 'localStorage', {
+        get: function () {
+          return window.sessionStorage;
+        },
+        configurable: true,
+      });
+    } catch (e) {
+      console.warn('Tab storage isolation', e);
+    }
+  })();
+</script>
 <script src="data.js?v=545"></script>
 <script src="setvi.js?v=545"></script>
 
@@ -122,5 +137,5 @@
 <script src="src/systems/gm-tool.js"></script>
 
 <script src="/multiplayer.js"></script>
-<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "6e9868fbdfd94f218303eef9b584d758"}'></script><!-- Cloudflare Pages Analytics --></body>
+</body>
 </html>

@@ -22,6 +22,8 @@
     pvpTargetHudEl: null,
   };
 
+  const pendingSaveRequests = new Map(); // reqId -> { resolve, timer }
+
   const FACTION_NAMES = {
     shaolin: 'Thiếu Lâm',
     tianwang: 'Thiên Vương',
@@ -287,14 +289,53 @@
   }
 
   function getHeroName() {
-    const heroEl = document.getElementById('heroName');
-    if (heroEl && heroEl.textContent && heroEl.textContent.trim() && heroEl.textContent !== 'Võ Lâm Idle') {
-      return heroEl.textContent.trim();
-    }
+    // 1. Kiểm tra trực tiếp đối tượng nhân vật đang chơi
     if (window.player && window.player.name) {
-      return window.player.name;
+      const pName = String(window.player.name).trim();
+      if (pName && pName !== 'Tân thủ' && !isFactionDisplayName(pName)) {
+        return pName;
+      }
     }
-    return state.username;
+
+    // 2. Kiểm tra biến r toàn cục nếu có
+    if (typeof r !== 'undefined' && r && r.name) {
+      const rName = String(r.name).trim();
+      if (rName && rName !== 'Tân thủ' && !isFactionDisplayName(rName)) {
+        return rName;
+      }
+    }
+
+    // 3. Kiểm tra save trong LocalStorage của slot hiện tại
+    try {
+      const curSlot = Number(localStorage.getItem('jxidle_slot') || sessionStorage.getItem('jxidle_in') || 0);
+      const slotKey = curSlot === 0 ? 'jxidle' : 'jxidle_' + (curSlot + 1);
+      const raw = localStorage.getItem(slotKey);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const st = (parsed && parsed.d) ? JSON.parse(parsed.d) : parsed;
+        if (st && st.name && !isFactionDisplayName(st.name)) {
+          return String(st.name).trim();
+        }
+      }
+    } catch (e) {}
+
+    // 4. Nếu có tên đã lưu trong state và không phải tên phái
+    if (state.username && !isFactionDisplayName(state.username) && !state.username.startsWith('ĐạiHiệp_') && !state.username.startsWith('hero_')) {
+      return state.username;
+    }
+
+    // 5. Nếu r.name có dù chưa đổi tên
+    if (window.player && window.player.name) return String(window.player.name).trim();
+    if (typeof r !== 'undefined' && r && r.name) return String(r.name).trim();
+
+    return state.username || 'Hiệp Khách';
+  }
+
+  function isFactionDisplayName(name) {
+    if (!name) return false;
+    const clean = String(name).trim().toLowerCase();
+    const allFacNames = Object.values(FACTION_NAMES).map((s) => s.toLowerCase());
+    return allFacNames.includes(clean) || ['võ đang', 'thiếu lâm', 'thiên vương', 'đường môn', 'ngũ độc', 'nga my', 'thúy yên', 'cái bang', 'thiên nhẫn', 'côn lôn'].includes(clean);
   }
 
   function getCurrentMap() {
@@ -1058,7 +1099,15 @@
               (p) => p.userId === state.userId || activeIds.has(p.userId)
             );
 
-            if (world.messages) state.chat = world.messages;
+            if (world.messages) {
+              state.chat = world.messages;
+              if (window.__nativeChat && typeof window.__nativeChat.loadHistory === 'function') {
+                window.__nativeChat.loadHistory(world.messages);
+              }
+            }
+            if (world.count && window.__nativeChat && typeof window.__nativeChat.setOnlineCount === 'function') {
+              window.__nativeChat.setOnlineCount(world.count);
+            }
             if (world.boss || world.monster) state.boss = world.boss || world.monster;
             updateUi();
             return;
@@ -1068,25 +1117,16 @@
             if (data.message) {
               state.chat.push(data.message);
               if (state.chat.length > 50) state.chat.shift();
-              const matchPlayer = state.players.find((p) => p.name === data.message.name);
+              const matchPlayer = state.players.find((p) => (data.message.userId && p.userId === data.message.userId) || (data.message.cid && p.userId === data.message.cid) || p.name === data.message.name);
               if (matchPlayer) {
                 state.lastChatMap.set(matchPlayer.userId, {
-                  text: data.message.text,
+                  text: data.message.text || data.message.msg,
                   ts: Date.now(),
                 });
               }
               // Đẩy thẳng vào khung chat gốc trong game
               if (window.__nativeChat && typeof window.__nativeChat.pushMsg === 'function') {
-                window.__nativeChat.pushMsg({
-                  id: data.message.id || ('ws_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)),
-                  userId: data.message.userId || (matchPlayer && matchPlayer.userId) || '',
-                  name: data.message.name || 'Hiệp khách',
-                  fac: data.message.fac || (matchPlayer && matchPlayer.fac) || '',
-                  lvl: data.message.lvl || (matchPlayer && matchPlayer.level) || 0,
-                  text: data.message.text || '',
-                  ts: data.message.ts || Date.now(),
-                  sys: data.message.name === 'Hệ thống',
-                });
+                window.__nativeChat.pushMsg(data.message);
               }
               updateUi();
             }
@@ -1251,6 +1291,17 @@
             if (!nativeFxTriggered) {
               spawnSkillVisual(attackerX, attackerY, targetX, targetY, data.fac || (matchPlayer && matchPlayer.fac));
             }
+            return;
+          }
+
+          if (data.type === 'save_char_ack') {
+            const reqId = data.reqId;
+            if (reqId && pendingSaveRequests.has(reqId)) {
+              const { resolve } = pendingSaveRequests.get(reqId);
+              pendingSaveRequests.delete(reqId);
+              resolve({ ok: !!data.ok, error: data.error || null, updated: data.updated || null });
+            }
+            return;
           }
         } catch (e) {
           console.warn('WS message parse error:', e);
@@ -1332,7 +1383,7 @@
 
       if (res.status === 401) {
         state.token = null;
-        localStorage.removeItem('volamidle_token');
+        sessionStorage.removeItem('volamidle_token');
         await ensureSession();
         return;
       }
@@ -1386,7 +1437,7 @@
   }
 
   // === ACTIONS ===
-  function sendChatMessageDirect(text) {
+  function sendChatMessageDirect(text, extra = {}) {
     if (!text || typeof text !== 'string') return;
     const cleanText = text.trim();
     if (!cleanText) return;
@@ -1398,9 +1449,12 @@
       state.ws.send(JSON.stringify({
         type: 'chat',
         text: cleanText,
+        msg: cleanText,
         name: heroName,
         fac: hero.fac,
         lvl: hero.level,
+        cid: state.userId,
+        item: extra.item || null,
         mapId: hero.mapId,
         mapName: hero.mapName,
       }));
@@ -1415,6 +1469,75 @@
         }),
       }).then(() => syncHttp());
     }
+  }
+
+  // === LƯU THÔNG TIN NHÂN VẬT REALTIME QUA WEBSOCKET ===
+  function saveCharacterRealtime(slot, savePayload, meta = {}) {
+    return new Promise((resolve) => {
+      const token = state.token || sessionStorage.getItem('volamidle_token') || '';
+      const reqId = 'save_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+      const isWsReady = state.wsConnected && state.ws && state.ws.readyState === WebSocket.OPEN;
+
+      if (!isWsReady) {
+        // Fallback sang API HTTP nếu WebSocket chưa kết nối
+        const apiBase = window.SAVES_API_BASE || window.SERVER_API_BASE || '';
+        const bodyObj = {
+          name: meta.name || '',
+          lvl: meta.lvl || 0,
+          fac: meta.fac || '',
+          data: savePayload,
+        };
+        fetch(apiBase + '/api/saves/' + (slot | 0), {
+          method: 'PUT',
+          headers: Object.assign(
+            { 'Content-Type': 'application/json' },
+            token ? { Authorization: 'Bearer ' + token } : {}
+          ),
+          body: JSON.stringify(bodyObj),
+        })
+          .then((res) => res.json().catch(() => ({})))
+          .then((json) => {
+            if (json && json.ok) resolve({ ok: true, error: null, updated: json.updated });
+            else resolve({ ok: false, error: (json && json.error) || 'Lỗi lưu save (HTTP fallback)' });
+          })
+          .catch((err) => resolve({ ok: false, error: (err && err.message) || 'Lỗi kết nối HTTP' }));
+        return;
+      }
+
+      const timer = setTimeout(() => {
+        if (pendingSaveRequests.has(reqId)) {
+          pendingSaveRequests.delete(reqId);
+          resolve({ ok: false, error: 'Hết thời gian phản hồi máy chủ (timeout)' });
+        }
+      }, 5000);
+
+      pendingSaveRequests.set(reqId, {
+        resolve: (res) => {
+          clearTimeout(timer);
+          resolve(res);
+        },
+      });
+
+      try {
+        state.ws.send(
+          JSON.stringify({
+            type: 'save_char',
+            reqId,
+            token,
+            owner: state.userId || undefined,
+            slot: slot | 0,
+            name: meta.name || '',
+            lvl: meta.lvl | 0,
+            fac: meta.fac || '',
+            data: savePayload,
+          })
+        );
+      } catch (err) {
+        clearTimeout(timer);
+        pendingSaveRequests.delete(reqId);
+        resolve({ ok: false, error: (err && err.message) || 'Lỗi gửi WebSocket' });
+      }
+    });
   }
 
   function sendChatMessage() {
@@ -1635,20 +1758,24 @@
     }
   }
 
-  // Tìm người chơi khác tại tọa độ Canvas click
-  function findPlayerAt(worldX, worldY, maxDist = 45) {
+  // Tìm người chơi khác tại tọa độ Canvas click (hỗ trợ cả thân trên, đầu và chân nhân vật)
+  function findPlayerAt(worldX, worldY, maxDist = 58) {
     if (!state.players || !state.players.length) return null;
-    const heroMap = getCurrentMap();
     let best = null;
     let minD = maxDist;
 
     for (const p of state.players) {
       if (p.userId === state.userId) continue;
       if (!isPlayerOnHeroMap(p)) continue;
+      if (p.hp <= 0 || p.status === 'trọng thương' || p.act === 'die') continue;
 
       const px = Number.isFinite(p.renderX) ? p.renderX : p.x || 160;
       const py = Number.isFinite(p.renderY) ? p.renderY : p.y || 180;
-      const dist = Math.hypot(px - worldX, py - 20 - worldY);
+      // Trọng tâm thân nhân vật thường nằm từ py - 10 tới py - 45
+      const dx = px - worldX;
+      const dy = (py - 24) - worldY;
+      // Dùng khoảng cách elip dọc theo dáng người đứng (chiều cao lớn hơn chiều ngang)
+      const dist = Math.hypot(dx * 1.25, dy);
       if (dist < minD) {
         minD = dist;
         best = p;
@@ -1657,14 +1784,18 @@
     return best;
   }
 
-  // Chọn người chơi làm mục tiêu chiến đấu
-  function selectTargetPlayer(player, autoAttack = false) {
+  // Chọn người chơi làm mục tiêu chiến đấu (ưu tiên tấn công người đó)
+  function selectTargetPlayer(player, autoAttack = true) {
     if (!player) return;
     const prevId = state.selectedTargetId;
     state.selectedTargetId = player.userId;
 
     if (typeof c !== 'undefined') {
       c.playerTgt = player;
+      c.manTgt = null; // Hủy target quái để tập trung 100% vào người chơi
+      if (c.moveTo && !c.moveTo._isPvpTarget) {
+        c.moveTo = null;
+      }
     }
 
     const facKey = String(player.fac || 'wudang').toLowerCase();
@@ -1680,8 +1811,9 @@
     updateUi();
     updateTargetHud();
 
-    if (autoAttack || state.autoPvP) {
-      attackPlayer(player.userId, false);
+    // Tấn công ngay lập tức khi chủ động chọn hoặc khi đang ở chế độ PK
+    if (autoAttack || state.autoPvP || (typeof r !== 'undefined' && r.mode === 'pk')) {
+      attackPlayer(player.userId, true);
     }
   }
 
@@ -2156,6 +2288,9 @@
       return;
     }
     state.autoPvP = true;
+    if (typeof c !== 'undefined') {
+      c.manTgt = null; // Bỏ chọn quái để ưu tiên người chơi
+    }
     updateTargetHud();
     const enemy = findNearestPvPEnemy();
     if (enemy) {
@@ -2170,6 +2305,9 @@
   setInterval(() => {
     if (typeof r !== 'undefined' && r.mode === 'pk') {
       if (isTownMap()) return; // Vùng an toàn
+      if (typeof c !== 'undefined') {
+        c.manTgt = null; // Luôn xóa chọn quái khi ở chế độ PK
+      }
       const cur = state.selectedTargetId ? state.players.find((p) => p.userId === state.selectedTargetId) : null;
       if (!cur || cur.hp <= 0 || !isPlayerOnHeroMap(cur) || isTownMap(cur)) {
         const nextEnemy = findNearestPvPEnemy();
@@ -2178,7 +2316,7 @@
         }
       }
     }
-  }, 1000);
+  }, 400);
 
   // === HỆ THỐNG TRỌNG THƯƠNG & VỀ THÀNH DƯỠNG SỨC (BIỆN KINH) ===
   function respawnAtTown() {
@@ -2535,7 +2673,7 @@
       const val = panel.name.value.trim();
       if (val) {
         state.username = val;
-        localStorage.setItem('volamidle_name', val);
+        sessionStorage.setItem('volamidle_name', val);
         if (state.wsConnected && state.ws) {
           const hero = getHeroSnapshot();
           state.ws.send(JSON.stringify({ type: 'sync', name: val, ...hero }));
@@ -2694,5 +2832,6 @@
     onPkModeActivated,
     respawnAtTown,
     showDeathDialog,
+    saveCharacterRealtime,
   };
 })();

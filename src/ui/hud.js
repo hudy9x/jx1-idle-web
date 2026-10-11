@@ -1843,6 +1843,16 @@ var Ws = {
         M(
           `🌱 Nhận <b>Hỗ Trợ Tân Thủ</b>: vòng sáng hồi ${Wn.life * 100}% sinh lực + ${Wn.mana * 100}% nội lực mỗi giây, <b>+${N3 * 100}% kinh nghiệm</b> luyện cấp đến cấp ${Ee}.`,
         ));
+      try {
+        if (typeof wf === "function") wf();
+        if (typeof fn === "function") {
+          fn(0, "Khởi đầu giang hồ");
+        } else if (typeof vn === "function" && typeof V0 === "function") {
+          vn(V0(Math.min((r && r.stage) || 1, typeof l0 !== "undefined" ? l0 : 1)));
+        }
+      } catch (err) {
+        console.error("Error setting initial zone in x5:", err);
+      }
     },
     B5 = function () {
       if (!Kn()) return;
@@ -2539,9 +2549,30 @@ var Ws = {
       };
       (aA.addEventListener("pointerdown", (e) => {
         if (K.active) return;
+        const [o, l] = A(e);
+        const worldX = o + p0.x, worldY = l + p0.y;
+
+        // Ưu tiên cao nhất: Click vào Hiệp Khách đối phương (PvP Player Targeting)
+        if (typeof window.__volamidleOnline?.findPlayerAt === "function") {
+          const pvpTgt = window.__volamidleOnline.findPlayerAt(worldX, worldY, 68);
+          if (pvpTgt) {
+            window.__volamidleOnline.selectTargetPlayer(pvpTgt, true);
+            Object.assign(K, {
+              active: false,
+              id: null,
+              fromJoy: false,
+              mouse: false,
+              moved: false,
+              target: null,
+              tmp: false,
+            });
+            c.pickTarget = null;
+            return;
+          }
+        }
+
         if (Ta() && e.pointerType !== "touch") {
-          const [o, l] = A(e),
-            d = X6(o + p0.x, l + p0.y);
+          const d = X6(worldX, worldY);
           if (
             (Object.assign(K, {
               active: !0,
@@ -2560,19 +2591,9 @@ var Ws = {
               (K.mouse = !1));
             return;
           }
-          // Kiểm tra mục tiêu Hiệp khách khác (PvP Player Targeting)
-          const pvpTgt = typeof window.__volamidleOnline?.findPlayerAt === "function"
-            ? window.__volamidleOnline.findPlayerAt(o + p0.x, l + p0.y)
-            : null;
-          if (pvpTgt) {
-            window.__volamidleOnline.selectTargetPlayer(pvpTgt, true);
-            K.mouse = false;
-            K.target = null;
-            return;
-          }
 
           if (fA()) {
-            const f = gd(o + p0.x, l + p0.y);
+            const f = gd(worldX, worldY);
             if (f) {
               ((c.manTgt = f),
                 (K.mouse = !1),
@@ -2582,11 +2603,11 @@ var Ws = {
             }
           }
           fA() || (K.tmp = !0);
-          const [h, g] = K0(o + p0.x, l + p0.y);
+          const [h, g] = K0(worldX, worldY);
           ((K.target = { x: h, y: g }), (c.pickTarget = null));
           return;
         }
-        const [a, i] = A(e);
+        const [a, i] = [o, l];
         (Object.assign(K, {
           active: !0,
           id: e.pointerId,
@@ -2621,30 +2642,42 @@ var Ws = {
         }));
       const n = (e) => {
         if (e.pointerId !== K.id) return;
-        const [a, i] = A(e),
-          o = !K.moved && !K.mouse;
+        const [a, i] = A(e);
+        const worldX = a + p0.x, worldY = i + p0.y;
+
+        // Ưu tiên cao nhất khi nhấc chuột / kết thúc thao tác: Chọn người chơi PvP
+        if (typeof window.__volamidleOnline?.findPlayerAt === "function") {
+          const pvpTgt = window.__volamidleOnline.findPlayerAt(worldX, worldY, 68);
+          if (pvpTgt) {
+            window.__volamidleOnline.selectTargetPlayer(pvpTgt, true);
+            Object.assign(K, {
+              active: false,
+              id: null,
+              fromJoy: false,
+              mouse: false,
+              moved: false,
+              target: null,
+              tmp: false,
+            });
+            c.pickTarget = null;
+            return;
+          }
+        }
+
+        const o = !K.moved && !K.mouse;
         if (
           ((K.mouse = !1), (K.active = !1), (K.id = null), (K.moved = !1), !o)
         )
           return;
-        // Kiểm tra mục tiêu Hiệp khách khác (PvP Player Targeting)
-        const pvpTgt = typeof window.__volamidleOnline?.findPlayerAt === "function"
-          ? window.__volamidleOnline.findPlayerAt(a + p0.x, i + p0.y)
-          : null;
-        if (pvpTgt) {
-          window.__volamidleOnline.selectTargetPlayer(pvpTgt, true);
-          K.target = null;
-          return;
-        }
 
         if (fA()) {
-          const d = gd(a + p0.x, i + p0.y);
+          const d = gd(worldX, worldY);
           if (d) {
             ((c.manTgt = d), (K.target = null), y("Tấn công: " + d.n));
             return;
           }
         }
-        const l = X6(a + p0.x, i + p0.y);
+        const l = X6(worldX, worldY);
         if (l) {
           ((c.pickTarget = c.pickTarget === l ? null : l),
             c.pickTarget && y(`Đi nhặt: ${l.it.n}`));
@@ -2652,7 +2685,7 @@ var Ws = {
         }
         {
           fA() || (K.tmp = !0);
-          const [d, h] = K0(a + p0.x, i + p0.y);
+          const [d, h] = K0(worldX, worldY);
           K.target = { x: d, y: h };
         }
       };

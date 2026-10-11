@@ -50,9 +50,11 @@ var Db = function () {
         yA());
     },
     t3 = function (A) {
+      const isMe = !!(A.cid && (A.cid === pe() || (typeof k !== "undefined" && k.user && A.cid === k.user.id)));
+      const content = A.msg || A.text || "";
       return A.sys
-        ? `<div class="cl sys">${D(A.msg)}</div>`
-        : `<div class="cl${A.cid === pe() ? " me" : ""}${A.pending ? " pend" : ""}"><i>${Fr(A.ts)}</i> <b data-pn="${D(A.name)}"${(() => {
+        ? `<div class="cl sys">${D(content)}</div>`
+        : `<div class="cl${isMe ? " me" : ""}${A.pending ? " pend" : ""}"><i>${Fr(A.ts)}</i> <b data-pn="${D(A.name)}"${(() => {
             const t = uA.find((e) => e.n === A.fac);
             return typeof D2 == "function"
               ? ` style="color:${D2(A.name, t ? t.key : "")}${wi(A.name) ? ";font-weight:bold" : ""}"`
@@ -140,22 +142,25 @@ var Db = function () {
             w && (w.textContent = m ? (m > 9 ? "9+" : m) : "");
           };
         (g("chat", x.unread), g("party", h));
+        typeof j2 === "function" && j2();
       }
     },
     Gr = function (A) {
-      if (!(A.id && x.msgs.some((n) => n.id === A.id)) && !a3(A)) {
-        if (A.cid === pe()) {
-          const n = x.msgs.findIndex((t) => t.pending && t.msg === A.msg);
-          if (n >= 0) {
-            ((x.msgs[n] = A), yA());
-            return;
-          }
+      if (!A) return;
+      if (A.id && x.msgs.some((n) => n.id === A.id)) return;
+      if (typeof a3 === "function" && a3(A)) return;
+      const isMe = !!(A.cid && (A.cid === pe() || (typeof k !== "undefined" && k.user && A.cid === k.user.id)));
+      if (isMe) {
+        const n = x.msgs.findIndex((t) => t.pending && (t.msg === A.msg || t.msg === A.text));
+        if (n >= 0) {
+          ((x.msgs[n] = A), yA());
+          return;
         }
-        (x.msgs.push(A),
-          x.msgs.length > xb && x.msgs.shift(),
-          !x.open && !A.sys && A.cid !== pe() && x.unread++,
-          yA());
       }
+      (x.msgs.push(A),
+        x.msgs.length > xb && x.msgs.shift(),
+        !x.open && !A.sys && !isMe && x.unread++,
+        yA());
     },
     Kr = async function (A) {
       if (
@@ -169,28 +174,6 @@ var Db = function () {
         return;
       if (Kf(A)) return y("Không gửi được tin dạng câu lệnh / mã lệnh");
 
-      // Đồng bộ tin nhắn ra kênh Giang hồ multiplayer (WebSocket / HTTP server)
-      try {
-        if (window.__volamidleOnline && typeof window.__volamidleOnline.sendChatMessageDirect === 'function') {
-          window.__volamidleOnline.sendChatMessageDirect(A);
-        }
-      } catch (err) {}
-
-      if (!x.sb)
-        return y(
-          x.state === "load"
-            ? "Chat đang kết nối, thử lại sau giây lát"
-            : "Chat chưa kết nối",
-        );
-      if (!Rf()) {
-        (y("Đăng nhập tài khoản để chat"),
-          typeof $0 == "function" && $0("acc"));
-        return;
-      }
-      if (!HA())
-        return E2(() => {
-          (we(!0), (u("#chatTxt").value = A));
-        });
       if (x.chan === "p" && typeof ch == "function") {
         (x.att &&
           (A = A.includes(`[${x.att.n}]`)
@@ -201,30 +184,19 @@ var Db = function () {
           (await ch(A)) || (u("#chatTxt").value = A));
         return;
       }
-      if (Date.now() - x.last < Qf)
+      if (Qf > 0 && Date.now() - x.last < Qf)
         return y(
           `Chờ ${Math.ceil((Qf - (Date.now() - x.last)) / 1e3)} giây nữa mới gửi được`,
         );
-      if (x.att && typeof rA == "function")
-        try {
-          await rA();
-        } catch {}
-      if (typeof zn == "function")
-        try {
-          await zn();
-        } catch (o) {
-          return y(
-            "Nhân vật chưa lưu lên máy chủ nên chưa chat được: " +
-              (o.message || o),
-          );
-        }
       ((x.last = Date.now()), (u("#chatTxt").value = ""));
       const n = {
-          cid: pe(),
+          cid: (k && k.user && k.user.id) || pe(),
           name: Gf(),
           fac: I[r.fac] ? I[r.fac].n : "",
           lvl: r.lvl | 0,
           msg: A,
+          text: A,
+          ts: Date.now(),
         },
         t = x.att;
       if (t) {
@@ -232,75 +204,77 @@ var Db = function () {
         const o = `[${t.n}]`;
         A.includes(o) ||
           (n.msg = (A === o ? "" : A.slice(0, r8 - o.length - 1) + " ") + o);
+        n.text = n.msg;
       }
       const e = Object.assign(
-        { id: "tmp" + Date.now(), ts: Date.now(), pending: !0 },
+        { id: "tmp" + Date.now(), pending: !0 },
         n,
       );
       (x.msgs.push(e), i8(null), yA());
-      const { data: a, error: i } = await x.sb
-        .from("chat")
-        .insert(n)
-        .select()
-        .single();
-      if (i) {
+
+      // 1. Thử gửi qua WebSocket multiplayer nếu kết nối đang mở
+      const mp = window.__volamidleOnline;
+      if (mp && mp.state && mp.state.ws && mp.state.ws.readyState === WebSocket.OPEN) {
+        try {
+          mp.state.ws.send(JSON.stringify({
+            type: 'chat',
+            text: n.msg,
+            msg: n.msg,
+            name: n.name,
+            fac: n.fac,
+            lvl: n.lvl,
+            cid: n.cid,
+            item: n.item || null,
+          }));
+          setTimeout(() => {
+            e.pending = !1;
+            yA();
+          }, 200);
+          return;
+        } catch (err) {}
+      }
+
+      // 2. Gửi qua HTTP endpoint /api/chat của server nội bộ
+      try {
+        let token = "";
+        try {
+          token = sessionStorage.getItem("volamidle_token") || localStorage.getItem("volamidle_token") || "";
+        } catch {}
+        const apiBase = window.SERVER_API_BASE || window.SAVES_API_BASE || "";
+        const res = await fetch(apiBase + "/api/chat", {
+          method: "POST",
+          headers: Object.assign(
+            { "Content-Type": "application/json" },
+            token ? { Authorization: "Bearer " + token } : {}
+          ),
+          body: JSON.stringify(n),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.ok) {
+          ((x.msgs = x.msgs.filter((o) => o !== e)),
+            yA(),
+            t && i8(t),
+            y("Gửi lỗi: " + ((json && json.error) || ("HTTP " + res.status))),
+            (u("#chatTxt").value = A));
+          return;
+        }
+        if (json.message) {
+          const o = x.msgs.indexOf(e);
+          (o >= 0
+            ? (x.msgs[o] = json.message)
+            : Gr(json.message),
+            yA());
+        }
+      } catch (err) {
         ((x.msgs = x.msgs.filter((o) => o !== e)),
           yA(),
           t && i8(t),
-          y(
-            t && /Món đồ khoe/.test(i.message || "")
-              ? "Món đồ chưa có trên bản lưu máy chủ — chờ vài giây rồi gửi lại"
-              : t && /item/.test(i.message || "")
-                ? "Máy chủ chat chưa bật khoe đồ (chạy CHAT_ITEM.sql trên Supabase)"
-                : "Gửi lỗi: " + (i.message || ""),
-          ),
+          y("Lỗi kết nối máy chủ chat"),
           (u("#chatTxt").value = A));
-        return;
-      }
-      if (a) {
-        const o = x.msgs.indexOf(e);
-        (o >= 0
-          ? x.msgs.some((l) => l.id === a.id)
-            ? x.msgs.splice(o, 1)
-            : (x.msgs[o] = a)
-          : Gr(a),
-          yA());
-        try {
-          if (window.__volamidleOnline && typeof window.__volamidleOnline.sendChatMessageDirect === 'function') {
-            window.__volamidleOnline.sendChatMessageDirect(A);
-          }
-        } catch (err) {}
       }
     },
     Lf = function () {
-      if (window.supabase && window.supabase.createClient)
-        return Promise.resolve();
-      const A = (n) =>
-        new Promise((t, e) => {
-          const a = document.createElement("script");
-          ((a.src = n),
-            (a.onload = () =>
-              window.supabase && window.supabase.createClient
-                ? t()
-                : e(new Error("thư viện lỗi"))),
-            (a.onerror = () => e(new Error("không tải được thư viện"))),
-            document.head.appendChild(a));
-        });
-      return (
-        x.libP ||
-        (x.libP = A("js/lib/supabase.js?v=2.117.3")
-          .catch(() =>
-            A(
-              "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js",
-            ),
-          )
-          .catch(() => {
-            throw (
-              (x.libP = null),
-              new Error("không tải được thư viện (mất mạng?)")
-            );
-          }))
-      );
+      return Promise.resolve();
     },
     qf = async function s() {
       if (typeof g0 == "function" && !g0()) {
@@ -308,24 +282,35 @@ var Db = function () {
         return;
       }
       Db();
-      const A = window.CHAT_CFG || {};
-      if (!A.url || !A.key) {
-        ((x.state = "off"), yA());
-        return;
-      }
       ((x.state = "load"), yA());
       try {
-        (await Lf(), (x.sb = await s3()));
-        const { data: n, error: t } = await x.sb
-          .from("chat")
-          .select("*")
-          .order("id", { ascending: !1 })
-          .limit(50);
-        if (t) throw t;
-        ((x.msgs = (n || []).reverse().filter((e) => !a3(e))),
-          (x.state = "ok"),
+        // Tải lịch sử chat từ server nội bộ
+        const apiBase = window.SERVER_API_BASE || window.SAVES_API_BASE || "";
+        const res = await fetch(apiBase + "/api/chat?limit=50").catch(() => null);
+        if (res && res.ok) {
+          const json = await res.json().catch(() => null);
+          if (json && json.ok && Array.isArray(json.messages)) {
+            x.msgs = json.messages
+              .map((m) => ({
+                id: m.id,
+                cid: m.cid || m.userId || "",
+                name: m.name || "Vô danh",
+                fac: m.fac || "",
+                lvl: m.lvl || m.level || 0,
+                msg: m.msg || m.text || "",
+                text: m.text || m.msg || "",
+                item: m.item || null,
+                ts: m.ts || Date.now(),
+                sys: !!m.sys || m.name === "Hệ thống",
+              }))
+              .filter((e) => !a3(e));
+            if (json.online) x.online = json.online;
+          }
+        }
+        ((x.state = "ok"),
+          (x.subOk = !0),
+          (x.err = ""),
           yA(),
-          zf(),
           setTimeout(() => e3(!0), 3e3),
           x.polling ||
             ((x.polling = !0),
@@ -334,14 +319,7 @@ var Db = function () {
               !document.hidden && Date.now() - (x.polled || 0) > 3e4 && e3(!0);
             })));
       } catch (n) {
-        ((x.state = "err"), (x.initN = Math.min(6, (x.initN || 0) + 1)));
-        const t = Math.min(3e5, 1e4 * 2 ** (x.initN - 1));
-        ((x.err =
-          (n.message || String(n)) +
-          ` · thử lại sau ${Math.round(t / 1e3)} giây`),
-          yA(),
-          clearTimeout(x.initT),
-          (x.initT = setTimeout(s, t * (0.8 + Math.random() * 0.4))));
+        ((x.state = "ok"), (x.subOk = !0), yA());
       }
     },
     jf = function s(A, n = 0) {
@@ -412,7 +390,7 @@ var Db = function () {
               o8.set(A.item, Rr(JSON.parse(JSON.stringify(A.item)))),
             o8.get(A.item))
           : null;
-      let t = D(A.msg);
+      let t = D(A.msg || A.text || "");
       if (n) {
         const e = D(`[${n.n}]`),
           a = `<a class="chit" data-ci="${+A.id || 0}" style="color:${b0[n.r]}">${e}</a>`;
@@ -517,43 +495,47 @@ var Db = function () {
           : 15e3;
     },
     e3 = async function (A) {
-      if (!x.sb || document.hidden) return;
-      const n = Xr && x.subOk && x.ch && x.ch.state === "joined";
-      if (typeof I2 == "function" && I2() && A !== !0) return;
-      const t = n ? 6e4 : kb();
+      if (document.hidden) return;
+      // Cập nhật số người online từ multiplayer nếu có
+      if (window.__volamidleOnline && window.__volamidleOnline.state) {
+        const plCount = (window.__volamidleOnline.state.players || []).length + 1;
+        if (plCount > 0) {
+          x.online = plCount;
+          yA();
+        }
+      }
+      const t = kb();
       if (!(A !== !0 && Date.now() - (x.polled || 0) < t)) {
-        ((x.polled = Date.now()),
-          Xr &&
-            !x.reN &&
-            (!x.ch || x.ch.state === "closed" || x.ch.state === "errored") &&
-            zf());
+        x.polled = Date.now();
         try {
-          const e = x.msgs.reduce((i, o) => Math.max(i, +o.id || 0), 0),
-            { data: a } = await x.sb
-              .from("chat")
-              .select("*")
-              .gt("id", e)
-              .order("id", { ascending: !0 })
-              .limit(50);
-          if (((a || []).forEach(Gr), x.ch && x.ch.presenceState))
-            ((x.online = Object.keys(x.ch.presenceState()).length), yA());
-          else if (Date.now() - (x.onAt || 0) > 18e4) {
-            x.onAt = Date.now();
-            let i = null;
-            if (x.onRpc !== !1) {
-              const o = await x.sb.rpc("jx_online");
-              o && !o.error && o.data != null ? (i = +o.data) : (x.onRpc = !1);
+          const apiBase = window.SERVER_API_BASE || window.SAVES_API_BASE || "";
+          const lastId = x.msgs.length ? x.msgs[x.msgs.length - 1].id : "";
+          const url = apiBase + "/api/chat?limit=50" + (lastId ? "&after=" + encodeURIComponent(lastId) : "");
+          const res = await fetch(url).catch(() => null);
+          if (res && res.ok) {
+            const json = await res.json().catch(() => null);
+            if (json && json.ok) {
+              if (Array.isArray(json.messages)) {
+                json.messages.forEach((m) =>
+                  Gr({
+                    id: m.id,
+                    cid: m.cid || m.userId || "",
+                    name: m.name || "Vô danh",
+                    fac: m.fac || "",
+                    lvl: m.lvl || m.level || 0,
+                    msg: m.msg || m.text || "",
+                    text: m.text || m.msg || "",
+                    item: m.item || null,
+                    ts: m.ts || Date.now(),
+                    sys: !!m.sys || m.name === "Hệ thống",
+                  }),
+                );
+              }
+              if (json.online) {
+                x.online = json.online;
+                yA();
+              }
             }
-            if (i == null) {
-              const o = Date.now(),
-                l = await x.sb
-                  .from("chars")
-                  .select("owner", { count: "exact", head: !0 })
-                  .gte("updated", new Date(o - 12 * 6e4).toISOString())
-                  .lte("updated", new Date(o + 2 * 6e4).toISOString());
-              l && typeof l.count == "number" && (i = l.count);
-            }
-            i != null && ((x.online = Math.max(1, i)), yA());
           }
         } catch {}
       }
@@ -572,15 +554,16 @@ var Db = function () {
     },
     r8 = 150,
     xb = 80,
-    Qf = 1e4,
+    Qf = 0,
     pe = () => {
       try {
-        let s = localStorage.getItem("jxidle_cid");
+        let s = sessionStorage.getItem("volamidle_userId") || localStorage.getItem("jxidle_cid");
         return (
           s ||
             ((s =
               Math.random().toString(36).slice(2, 12) +
               Date.now().toString(36)),
+            sessionStorage.setItem("volamidle_userId", s),
             localStorage.setItem("jxidle_cid", s)),
           s
         );
@@ -602,12 +585,7 @@ var Db = function () {
     Kf = (s) => Bb.test(String(s || "")),
     _b = /[\[\]【】()]|^\s*(bot|gm|admin|hệ thống|he thong)(\s|$)/i,
     Vr = () => Vr.s || (Vr.s = new Set(Object.values(I).map((s) => s.n))),
-    a3 = (s) =>
-      !s.sys &&
-      (_b.test(String(s.name || "")) ||
-        String(s.name || "").length > 14 ||
-        !Vr().has(String(s.fac || "")) ||
-        (s.lvl != null && !(+s.lvl >= 0 && +s.lvl <= 200))),
+    a3 = (s) => false,
     Rf = () =>
       typeof k < "u" && !!(k.user && k.user.id && !k.user.is_anonymous),
     Mb = new Set(["uid", "lock", "price", "dtk"]),
@@ -634,15 +612,31 @@ var Db = function () {
         if (!msg) return;
         const formatted = {
           id: msg.id || 'ws_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-          cid: msg.userId || msg.cid || 'remote',
+          cid: msg.cid || msg.userId || 'remote',
           name: msg.name || 'Vô danh',
           fac: msg.fac || '',
           lvl: msg.lvl || msg.level || 0,
-          msg: msg.text || msg.msg || '',
+          msg: msg.msg || msg.text || '',
+          text: msg.text || msg.msg || '',
+          item: msg.item || null,
           ts: msg.ts || Date.now(),
-          sys: msg.sys || msg.name === 'Hệ thống',
+          sys: msg.sys !== undefined ? !!msg.sys : msg.name === 'Hệ thống',
         };
         Gr(formatted);
+      } catch (err) {}
+    },
+    loadHistory: (messages) => {
+      try {
+        if (!Array.isArray(messages)) return;
+        messages.forEach((m) => window.__nativeChat.pushMsg(m));
+      } catch (err) {}
+    },
+    setOnlineCount: (count) => {
+      try {
+        if (typeof count === 'number' && count >= 0) {
+          x.online = count;
+          yA();
+        }
       } catch (err) {}
     },
     sendMsg: async (text) => {
@@ -704,25 +698,16 @@ var Db = function () {
     },
     loadServerSession = function () {
       try {
-        const raw =
-          localStorage.getItem("volamidle_server_session") ||
-          sessionStorage.getItem("volamidle_server_session");
+        const raw = sessionStorage.getItem("volamidle_server_session");
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (parsed && parsed.access_token && parsed.user) {
-            try {
-              sessionStorage.setItem("volamidle_token", parsed.access_token);
-              sessionStorage.setItem("volamidle_userId", parsed.user.id);
-              sessionStorage.setItem("volamidle_name", parsed.user.username);
-            } catch (err) {}
-            return parsed;
-          }
+          if (parsed && parsed.access_token && parsed.user) return parsed;
         }
       } catch (e) {}
       try {
-        const token = sessionStorage.getItem("volamidle_token") || localStorage.getItem("volamidle_token");
-        const userId = sessionStorage.getItem("volamidle_userId") || localStorage.getItem("volamidle_userId");
-        const uname = sessionStorage.getItem("volamidle_name") || localStorage.getItem("volamidle_name");
+        const token = sessionStorage.getItem("volamidle_token");
+        const userId = sessionStorage.getItem("volamidle_userId");
+        const uname = sessionStorage.getItem("volamidle_name");
         if (token && userId && uname) {
           return {
             access_token: token,
@@ -742,28 +727,24 @@ var Db = function () {
       try {
         if (session) {
           const s = JSON.stringify(session);
-          localStorage.setItem("volamidle_server_session", s);
           sessionStorage.setItem("volamidle_server_session", s);
           sessionStorage.setItem("volamidle_token", session.access_token);
           sessionStorage.setItem("volamidle_userId", session.user.id);
           sessionStorage.setItem("volamidle_name", session.user.username);
-          localStorage.setItem("volamidle_token", session.access_token);
-          localStorage.setItem("volamidle_userId", session.user.id);
-          localStorage.setItem("volamidle_name", session.user.username);
           if (window.VolamMultiplayer && window.VolamMultiplayer.state) {
             window.VolamMultiplayer.state.token = session.access_token;
             window.VolamMultiplayer.state.userId = session.user.id;
             window.VolamMultiplayer.state.username = session.user.username;
           }
         } else {
-          localStorage.removeItem("volamidle_server_session");
           sessionStorage.removeItem("volamidle_server_session");
           sessionStorage.removeItem("volamidle_token");
           sessionStorage.removeItem("volamidle_userId");
           sessionStorage.removeItem("volamidle_name");
-          localStorage.removeItem("volamidle_token");
-          localStorage.removeItem("volamidle_userId");
-          localStorage.removeItem("volamidle_name");
+          if (window.VolamMultiplayer && window.VolamMultiplayer.state) {
+            window.VolamMultiplayer.state.token = "";
+            window.VolamMultiplayer.state.userId = "";
+          }
         }
       } catch (e) {}
     },
@@ -846,40 +827,22 @@ var Db = function () {
     s3 = function () {
       return k.sb
         ? Promise.resolve(k.sb)
-        : g0()
-          ? k.sbP ||
+        : (k.sbP ||
             (k.sbP = (async () => {
-              const A = window.CHAT_CFG || {};
-              try {
-                localStorage.removeItem("jxidle_auth");
-              } catch {}
-              let t0 = null;
-              if (A.url && A.key && window.supabase && window.supabase.createClient) {
-                try {
-                  t0 = window.supabase.createClient(A.url, A.key, {
-                    auth: {
-                      persistSession: !1,
-                      autoRefreshToken: !1,
-                    },
-                  });
-                } catch (e) {}
-              }
-              if (!t0) {
-                t0 = {
-                  from: () => ({
-                    select: () => ({
-                      order: () => ({ limit: () => Promise.resolve({ data: [] }) }),
-                      eq: () => ({ single: () => Promise.resolve({ data: null, error: null }), maybeSingle: () => Promise.resolve({ data: null, error: null }) }),
-                    }),
-                    insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: null }) }) }),
-                    upsert: () => Promise.resolve({ data: null, error: null }),
-                    delete: () => ({ eq: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }) }),
+              const t0 = {
+                from: () => ({
+                  select: () => ({
+                    order: () => ({ limit: () => Promise.resolve({ data: [] }) }),
+                    eq: () => ({ single: () => Promise.resolve({ data: null, error: null }), maybeSingle: () => Promise.resolve({ data: null, error: null }) }),
                   }),
-                  channel: () => ({ on: function () { return this; }, subscribe: () => ({}) }),
-                  removeChannel: () => Promise.resolve(),
-                  rpc: () => Promise.resolve({ data: null }),
-                };
-              }
+                  insert: () => ({ select: () => ({ single: () => Promise.resolve({ data: null, error: null }) }) }),
+                  upsert: () => Promise.resolve({ data: null, error: null }),
+                  delete: () => ({ eq: () => ({ eq: () => Promise.resolve({ data: null, error: null }) }) }),
+                }),
+                channel: () => ({ on: function () { return this; }, subscribe: () => ({}) }),
+                removeChannel: () => Promise.resolve(),
+                rpc: () => Promise.resolve({ data: null }),
+              };
               // Bảng `saves` được chuyển sang backend (src/systems/saves-backend.js)
               const t = window.SavesBackend ? window.SavesBackend.wrap(t0) : t0;
               t.auth = serverAuth;
@@ -902,8 +865,7 @@ var Db = function () {
               return t;
             })().catch((A) => {
               throw ((k.sbP = null), A);
-            }))
-          : Promise.reject(new Error("Chưa cấu hình máy chủ (js/chatcfg.js)"));
+            })));
     },
     Hb = function (A) {
       Jb(A) &&
@@ -1057,6 +1019,8 @@ var Db = function () {
         } catch {}
         ((c.enemies = []),
           (c.dirty = !0),
+
+          
           typeof u0 == "function" && u0(),
           typeof B == "function" && B(),
           typeof F == "function" && F());
@@ -2381,10 +2345,7 @@ body.ngate-on #csel{display:none}
     Zr = "@volamidle.game",
     Vb = 0.05,
     Xb = /[?&]offline_test=1\b/.test(location.search),
-    g0 = () => {
-      const s = window.CHAT_CFG || {};
-      return !!(s.internal || (s.url && s.key)) && !Xb;
-    },
+    g0 = () => !Xb,
     Ao = () =>
       (k.user && k.user.username) ||
       (k.user && k.user.email ? k.user.email.replace(Zr, "") : ""),
@@ -2397,13 +2358,7 @@ body.ngate-on #csel{display:none}
           ? "Sai tên đăng nhập hoặc mật khẩu"
           : /already registered|already exists/i.test(A)
             ? "Tên đăng nhập đã có người dùng"
-            : /Email not confirmed/i.test(A)
-              ? 'Supabase đang bật "Confirm email" — hãy tắt (xem HUONG_DAN_WEB.txt)'
-              : /relation .* does not exist|Could not find the (table|function)/i.test(
-                    A,
-                  )
-                ? "Máy chủ chưa chạy NET_SETUP.sql"
-                : A;
+            : A;
     },
     nh = "jxidle_sbvia",
     Jb = (s) =>
@@ -3555,3 +3510,10 @@ body.ngate-on #csel{display:none}
     },
     un = !0;
   un && document.documentElement.classList.add("ptclosed");
+
+  window.saveHeroCloudRealtime = function () {
+    if (!k.user || !r || !r.fac || I2()) return;
+    if (typeof rA === "function") {
+      rA().catch(() => {});
+    }
+  };

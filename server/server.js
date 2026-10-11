@@ -61,6 +61,16 @@ const globalBoss = {
 const monsterWorld = createMonsterWorld();
 const MONSTER_TICK_MS = 100;
 
+const saveStore = createSaveStore(path.join(DATA_DIR, 'saves'));
+
+const verifySaveToken = async (token) => {
+  if (!token) return null;
+  if (process.env.SAVES_DEV_AUTH === '1' && String(token).startsWith('dev:')) {
+    return String(token).slice(4);
+  }
+  return sessionMap.get(token) || null;
+};
+
 function generateId(prefix) {
   return `${prefix}_${crypto.randomBytes(6).toString('hex')}`;
 }
@@ -276,6 +286,7 @@ function handleWsMessage(client, message) {
     if (!data || !data.type) return;
 
     if (data.type === 'auth') {
+      if (data.token) client.token = data.token;
       const userId = data.userId || (data.token && sessionMap.get(data.token));
       if (userId) {
         client.userId = userId;
@@ -389,9 +400,9 @@ function handleWsMessage(client, message) {
       const text = String(data.text || data.msg || '').trim();
       if (!text) return;
       const player = globalPlayers.get(client.userId);
-      const name = player ? player.name : data.name || 'Vô Danh';
-      const fac = player ? player.fac : data.fac || '';
-      const lvl = player ? player.level : Number(data.lvl || data.level) || 0;
+      const name = data.name || (player ? player.name : 'Hiệp Khách');
+      const fac = data.fac || (player ? player.fac : '') || '';
+      const lvl = Number(data.lvl || data.level) || (player ? player.level : 0) || 0;
       pushWorldMessage(text, name, {
         cid: client.userId || data.cid || '',
         userId: client.userId || data.userId || '',
@@ -528,6 +539,97 @@ function handleWsMessage(client, message) {
       }
       return;
     }
+
+    if (data.type === 'save_char') {
+      const token = data.token || client.token || '';
+      verifySaveToken(token)
+        .then((owner) => {
+          const effectiveOwner = owner || client.userId || (data.owner && String(data.owner));
+          if (!effectiveOwner) {
+            client.socket.write(
+              encodeWsFrame(
+                JSON.stringify({
+                  type: 'save_char_ack',
+                  reqId: data.reqId || null,
+                  slot: data.slot != null ? Number(data.slot) : null,
+                  ok: false,
+                  error: 'Chưa đăng nhập hoặc token không hợp lệ',
+                })
+              )
+            );
+            return;
+          }
+
+          const slotNum = Number(data.slot);
+          const slot = Number.isInteger(slotNum) && slotNum >= 0 && slotNum <= 99 ? slotNum : 0;
+          const savePayload = data.data;
+          if (!savePayload || typeof savePayload !== 'string') {
+            client.socket.write(
+              encodeWsFrame(
+                JSON.stringify({
+                  type: 'save_char_ack',
+                  reqId: data.reqId || null,
+                  slot,
+                  ok: false,
+                  error: 'Thiếu dữ liệu save',
+                })
+              )
+            );
+            return;
+          }
+
+          const record = {
+            name: String(data.name || '').slice(0, 64),
+            lvl: Number(data.lvl) | 0,
+            fac: String(data.fac || '').slice(0, 32),
+            data: savePayload,
+            updated: new Date().toISOString(),
+          };
+
+          saveStore
+            .put(effectiveOwner, slot, record)
+            .then(() => {
+              client.socket.write(
+                encodeWsFrame(
+                  JSON.stringify({
+                    type: 'save_char_ack',
+                    reqId: data.reqId || null,
+                    slot,
+                    ok: true,
+                    updated: record.updated,
+                  })
+                )
+              );
+            })
+            .catch((e) => {
+              client.socket.write(
+                encodeWsFrame(
+                  JSON.stringify({
+                    type: 'save_char_ack',
+                    reqId: data.reqId || null,
+                    slot,
+                    ok: false,
+                    error: e.message || 'Lỗi lưu save',
+                  })
+                )
+              );
+            });
+        })
+        .catch((err) => {
+          client.socket.write(
+            encodeWsFrame(
+              JSON.stringify({
+                type: 'save_char_ack',
+                reqId: data.reqId || null,
+                slot: data.slot != null ? Number(data.slot) : null,
+                ok: false,
+                error: (err && err.message) || 'Lỗi xác thực',
+              })
+            )
+          );
+        });
+      return;
+    }
   } catch (err) {
     console.error('WS parse error:', err);
   }
@@ -614,15 +716,6 @@ function readJsonBody(req, callback, maxBytes = 1e6) {
   });
 }
 
-const saveStore = createSaveStore(path.join(DATA_DIR, 'saves'));
-
-const verifySaveToken = async (token) => {
-  if (!token) return null;
-  if (process.env.SAVES_DEV_AUTH === '1' && String(token).startsWith('dev:')) {
-    return String(token).slice(4);
-  }
-  return sessionMap.get(token) || null;
-};
 
 const server = http.createServer((req, res) => {
   const { method, url } = req;

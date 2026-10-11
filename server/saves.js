@@ -74,29 +74,6 @@ function createSaveStore(dir) {
   };
 }
 
-/** Xác thực access token qua dịch vụ auth hiện tại (Supabase GoTrue) -> trả về user id. */
-function createTokenVerifier({ url, apiKey, fetchImpl = globalThis.fetch, ttlMs = 5 * 60 * 1000 }) {
-  const cache = new Map(); // token -> { id, exp }
-  return async function verify(token) {
-    if (!token) return null;
-    const hit = cache.get(token);
-    if (hit && hit.exp > Date.now()) return hit.id;
-    try {
-      const res = await fetchImpl(`${url}/auth/v1/user`, {
-        headers: { apikey: apiKey, Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) return null;
-      const user = await res.json();
-      if (!user || !user.id) return null;
-      cache.set(token, { id: String(user.id), exp: Date.now() + ttlMs });
-      if (cache.size > 2000) cache.delete(cache.keys().next().value);
-      return String(user.id);
-    } catch (e) {
-      return null;
-    }
-  };
-}
-
 function parseSlot(raw) {
   const n = Number(raw);
   return Number.isInteger(n) && n >= 0 && n <= MAX_SLOT ? n : null;
@@ -152,4 +129,4 @@ function handleSavesRequest({ req, res, pathname, parsedUrl, store, verify, send
   return true;
 }
 
-module.exports = { createSaveStore, createTokenVerifier, handleSavesRequest, MAX_BODY_BYTES };
+module.exports = { createSaveStore, handleSavesRequest, MAX_BODY_BYTES };

@@ -785,6 +785,14 @@ var PA = function (A) {
           -Math.round(p0.x) * d1,
           -Math.round(p0.y) * d1,
         ));
+      if (!c.bgImg && typeof r !== "undefined" && r && r.fac) {
+        try {
+          const curZ = c.curZone || (typeof V0 === "function" ? V0(Math.min((r && r.stage) || 1, typeof l0 !== "undefined" ? l0 : 1)) : null);
+          if (curZ && curZ.bg && typeof PA === "function") {
+            c.bgImg = PA(curZ.bg);
+          }
+        } catch (e) {}
+      }
       const t = c.bgImg;
       (op(n, t), (n.textAlign = "center"));
       for (const a of c.town ? [] : c.ground) {

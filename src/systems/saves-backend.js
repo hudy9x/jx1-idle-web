@@ -24,10 +24,7 @@
     } catch {}
     if (!token) {
       try {
-        token =
-          sessionStorage.getItem("volamidle_token") ||
-          localStorage.getItem("volamidle_token") ||
-          "";
+        token = sessionStorage.getItem("volamidle_token") || "";
       } catch {}
     }
     const res = await fetch(API + (slot != null ? "/" + slot : "") + (query || ""), {
@@ -94,6 +91,18 @@
       try {
         if (q.op === "upsert") {
           const r = q.row || {};
+          // Ưu tiên lưu realtime qua WebSocket nếu online multiplayer đang mở
+          const mp = window.__volamidleOnline;
+          if (mp && typeof mp.saveCharacterRealtime === "function") {
+            const res = await mp.saveCharacterRealtime(r.slot | 0, r.data, {
+              name: r.name,
+              lvl: r.lvl,
+              fac: r.fac,
+            });
+            if (res && res.ok) return { data: null, error: null };
+            // Nếu socket thất bại, tiếp tục fallback qua HTTP call
+          }
+
           const { status, json } = await call(client, "PUT", r.slot | 0, {
             name: r.name,
             lvl: r.lvl,

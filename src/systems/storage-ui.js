@@ -2720,7 +2720,10 @@ var L = {
         try {
           sessionStorage.setItem("jxidle_in", String(nA));
         } catch {}
-        ed();
+        const hasAuth = !!(sessionStorage.getItem("volamidle_server_session") || sessionStorage.getItem("volamidle_token"));
+        if (hasAuth) {
+          ed();
+        }
       }
       (document.addEventListener("visibilitychange", () => {
         (document.hidden
@@ -2749,13 +2752,14 @@ var L = {
             Ah();
           } catch {}
       };
+      e();
       (fetch("ver.json?t=" + Date.now(), { cache: "no-store" })
         .then((a) => (a.ok ? a.json() : null))
         .then((a) => {
           (a && +a.xp > 0 && typeof Yt < "u" && (Yt = +a.xp),
-            a && a.bt ? mk(a) : e());
+            a && a.bt && mk(a));
         })
-        .catch(e),
+        .catch(() => {}),
         requestAnimationFrame(dk));
     },
     gk = function () {

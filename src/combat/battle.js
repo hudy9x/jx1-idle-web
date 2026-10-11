@@ -962,13 +962,15 @@ var Gl = (s) =>
         Jl();
         return;
       }
+      const hasPvpTarget = (c.playerTgt && c.playerTgt.hp > 0) || (r.mode === "pk" && !c.town);
       (S1() && dd(A),
         (t && c.pickTarget) ||
-          (fA() && !(c.manTgt && !c.manTgt.dead && c.manTgt.hp > 0)
+          (!hasPvpTarget && fA() && !(c.manTgt && !c.manTgt.dead && c.manTgt.hp > 0)
             ? (c.manTgt = null)
-            : (S1() && !(fA() && c.manTgt)) ||
+            : (S1() && !(fA() && c.manTgt) && !c.moveTo?._isPvpTarget) ||
               (fA() &&
               c.manTgt &&
+              !hasPvpTarget &&
               c.moveTo === c.manTgt &&
               !K.target &&
               !K.active
@@ -990,7 +992,7 @@ var Gl = (s) =>
                       150 * i2() * (c.slowT > 0 ? e2 : 1) * A,
                     ))),
           !(c.stunT > 0) &&
-            !(fA() && !c.manTgt && r.mode !== "pk") &&
+            !(fA() && !c.manTgt && !hasPvpTarget) &&
             ((c.atkT -= A * (c.slowT > 0 ? e2 : 1)),
             c.atkT <= 0 && (c.atkT = zw()))));
       for (const e of M1()) Xl(e, A);
@@ -1883,6 +1885,16 @@ var Gl = (s) =>
           (localStorage.setItem(A, J1(r)),
             localStorage.setItem(Z1, String(nA)));
         } catch {}
+        if (typeof window.saveHeroCloudRealtime === "function") {
+          if (!window._rtSaveTimer) {
+            window._rtSaveTimer = setTimeout(() => {
+              window._rtSaveTimer = null;
+              try {
+                window.saveHeroCloudRealtime();
+              } catch {}
+            }, 800);
+          }
+        }
       }
     },
     A5 = function (A) {
